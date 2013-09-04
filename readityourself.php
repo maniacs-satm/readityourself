@@ -13,6 +13,9 @@ date_default_timezone_set('Europe/Paris');
 header('Content-Type: text/html;charset=utf-8');
 
 // get readability library
+require_once dirname(__FILE__).'/inc/config.php';
+
+// get readability library
 require_once dirname(__FILE__).'/inc/Readability.php';
 
 // get Encoding library.
@@ -23,6 +26,66 @@ require_once dirname(__FILE__).'/inc/rain.tpl.class.php';
 
 // FUNCTIONS BEGIN
 
+
+/**
+ * On modifie les URLS des images dans le corps de l'article
+ */
+function filtre_picture($content, $url)
+{
+    $matches = array();
+    preg_match_all('#<\s*(img)[^>]+src="([^"]*)"[^>]*>#Si', $content, $matches, PREG_SET_ORDER);
+    foreach($matches as $i => $link)
+    {
+        $link[1] = trim($link[1]);
+        if (!preg_match('#^(([a-z]+://)|(\#))#', $link[1]) )
+        {
+            $absolute_path = rel2abs($link[2],$url);
+            $filename = basename(parse_url($absolute_path, PHP_URL_PATH));
+            $directory = create_assets_directory($url);
+            $fullpath = $directory . '/' . $filename;
+            download_pictures($absolute_path, $fullpath);
+            $content = str_replace($matches[$i][2], $fullpath, $content);
+        }
+
+    }
+
+    return $content;
+}
+
+/**
+ * Crée un répertoire de médias pour l'article
+ */
+function create_assets_directory($url)
+{
+    $assets_path = ABS_PATH;
+    if(!is_dir($assets_path)) {
+        mkdir($assets_path, 0705);
+    }
+
+    $article_directory = $assets_path . md5($url);
+    if(!is_dir($article_directory)) {
+        mkdir($article_directory, 0705);
+    }
+
+    return $article_directory;
+}
+
+
+/**
+ * Téléchargement des images
+ */
+
+function download_pictures($absolute_path, $fullpath)
+{
+    $rawdata = get_external_file($absolute_path);
+
+    if(file_exists($fullpath)) {
+        unlink($fullpath);
+    }
+    $fp = fopen($fullpath, 'x');
+    fwrite($fp, $rawdata);
+    fclose($fp);
+}
 
 
 function url(){
@@ -41,6 +104,12 @@ function generate_page($url,$title,$content) {
 
 	$tpl->assign( "url", $url);
 	$tpl->assign( "title", $title);
+    
+    if (DOWNLOAD_PICTURES) {
+        $content = filtre_picture($content, $url, $last_id);
+    }
+
+    
 	$tpl->assign( "content", $content);
 	
 	$tpl->assign( "version", VERSION);
@@ -92,7 +161,7 @@ function get_external_file($url, $timeout) {
 	}
 
 	// if response is not empty and response is OK
-	if (isset($data) and isset($httpcodeOK) and httpcodeOK ) {
+	if (isset($data) and isset($httpcodeOK) and $httpcodeOK ) {
 
 		// take charset of page and get it
 		preg_match('#<meta .*charset=.*>#Usi', $data, $meta);
