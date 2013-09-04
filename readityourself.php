@@ -1,7 +1,5 @@
 <?php
 
-define("VERSION", "0.0.3");
-
 header('Content-type:text/html; charset=utf-8');
 // Set locale to French
 setlocale(LC_ALL, 'fr_FR');
@@ -11,6 +9,9 @@ date_default_timezone_set('Europe/Paris');
 
 // set charset to utf-8 important since all pages will be transform to utf-8
 header('Content-Type: text/html;charset=utf-8');
+
+
+$gets = array('picdown','picb64','css','url');
 
 // get readability library
 require_once dirname(__FILE__).'/inc/config.php';
@@ -27,11 +28,21 @@ require_once dirname(__FILE__).'/inc/rain.tpl.class.php';
 // FUNCTIONS BEGIN
 
 
+if(isset($_GET['picdown']) && $_GET['picdown'] != null) {
+    $PICTURES_DOWNLOAD = $_GET['picdown'] == 'true';
+}
+
+if(isset($_GET['picb64']) && $_GET['picb64'] != null) {
+    $PICTURES_BASE64 = $_GET['picb64'] == 'true';
+}
+
 /**
  * On modifie les URLS des images dans le corps de l'article
  */
-function filtre_picture($content, $url)
+function picture_filtre($content, $url)
 {
+    global $PICTURES_DOWNLOAD, $PICTURES_BASE64;
+    
     $matches = array();
     preg_match_all('#<\s*(img)[^>]+src="([^"]*)"[^>]*>#Si', $content, $matches, PREG_SET_ORDER);
     foreach($matches as $i => $link)
@@ -43,10 +54,14 @@ function filtre_picture($content, $url)
             $filename = basename(parse_url($absolute_path, PHP_URL_PATH));
             $directory = create_assets_directory($url);
             $fullpath = $directory . '/' . $filename;
-            download_pictures($absolute_path, $fullpath);
-            $content = str_replace($matches[$i][2], $fullpath, $content);
+            if($PICTURES_DOWNLOAD) {
+                pictures_download($absolute_path, $fullpath);
+                $content = str_replace($matches[$i][2], $fullpath, $content);
+            } else if($PICTURES_BASE64) {
+                $srcb64 = pictures_base64($absolute_path, $fullpath);
+                $content = str_replace($matches[$i][2], $srcb64, $content);
+            }
         }
-
     }
 
     return $content;
@@ -57,7 +72,7 @@ function filtre_picture($content, $url)
  */
 function create_assets_directory($url)
 {
-    $assets_path = ABS_PATH;
+    $assets_path = IMAGES_PATH;
     if(!is_dir($assets_path)) {
         mkdir($assets_path, 0705);
     }
@@ -75,9 +90,37 @@ function create_assets_directory($url)
  * Téléchargement des images
  */
 
-function download_pictures($absolute_path, $fullpath)
+function pictures_base64($absolute_path, $fullpath)
 {
-    $rawdata = get_external_file($absolute_path);
+    $rawdata = get_external_file($absolute_path,15);
+    
+    if(file_exists($fullpath)) {
+        unlink($fullpath);
+    }
+
+    $fp = fopen($fullpath, 'x');
+    fwrite($fp, $rawdata);
+    fclose($fp);
+    
+    $type = pathinfo($fullpath, PATHINFO_EXTENSION);
+
+    if(file_exists($fullpath)) {
+        unlink($fullpath);
+    }
+
+    return 'data:image/' . $type . ';base64,' . base64_encode($rawdata);
+}
+
+
+
+
+/**
+ * TÃ©lÃ©chargement des images
+ */
+
+function pictures_download($absolute_path, $fullpath)
+{
+    $rawdata = get_external_file($absolute_path,15);
 
     if(file_exists($fullpath)) {
         unlink($fullpath);
@@ -94,6 +137,8 @@ function url(){
 }
 
 function generate_page($url,$title,$content) {
+    global $PICTURES_DOWNLOAD, $PICTURES_BASE64;
+
 	raintpl::$tpl_dir = './tpl/'; // template directory
 	raintpl::$cache_dir = "./cache/"; // cache directory
 	raintpl::$base_url = url(); // base URL of blog
@@ -105,8 +150,8 @@ function generate_page($url,$title,$content) {
 	$tpl->assign( "url", $url);
 	$tpl->assign( "title", $title);
     
-    if (DOWNLOAD_PICTURES) {
-        $content = filtre_picture($content, $url, $last_id);
+    if ($PICTURES_DOWNLOAD == true || $PICTURES_BASE64 == true) {
+        $content = picture_filtre($content, $url);
     }
 
     
