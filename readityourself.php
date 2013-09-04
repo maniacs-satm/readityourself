@@ -1,4 +1,7 @@
 <?php
+
+define("VERSION", "0.0.3");
+
 header('Content-type:text/html; charset=utf-8');
 // Set locale to French
 setlocale(LC_ALL, 'fr_FR');
@@ -14,6 +17,36 @@ require_once dirname(__FILE__).'/inc/Readability.php';
 
 // get Encoding library.
 require_once dirname(__FILE__).'/inc/Encoding.php';
+
+// appel de la libraire RainTPL.
+require_once dirname(__FILE__).'/inc/rain.tpl.class.php';
+
+// FUNCTIONS BEGIN
+
+
+
+function url(){
+  $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+  return $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+}
+
+function generate_page($url,$title,$content) {
+	raintpl::$tpl_dir = './tpl/'; // template directory
+	raintpl::$cache_dir = "./cache/"; // cache directory
+	raintpl::$base_url = url(); // base URL of blog
+	raintpl::configure( 'path_replace', false );
+	raintpl::configure('debug', false); 
+
+	$tpl = new raintpl(); //include Rain TPL
+
+	$tpl->assign( "url", $url);
+	$tpl->assign( "title", $title);
+	$tpl->assign( "content", $content);
+	
+	$tpl->assign( "version", VERSION);
+	
+	$tpl->draw( "index"); // draw the template
+}
 
 // function define to retrieve url content
 function get_external_file($url, $timeout) {
@@ -87,6 +120,63 @@ function get_external_file($url, $timeout) {
 	}
 }
 
+function rel2abs($rel, $base)
+{
+    /* return if already absolute URL */
+    if (parse_url($rel, PHP_URL_SCHEME) != '') return $rel;
+
+    /* queries and anchors */
+    if ($rel[0]=='#' || $rel[0]=='?') return $base.$rel;
+
+    /* parse base URL and convert to local variables:
+       $scheme, $host, $path */
+    extract(parse_url($base));
+
+    /* remove non-directory element from path */
+    $path = preg_replace('#/[^/]*$#', '', $path);
+
+    /* destroy path if relative url points to root */
+    if ($rel[0] == '/') $path = '';
+
+    /* dirty absolute URL */
+    $abs = "$host$path/$rel";
+
+    /* replace '//' or '/./' or '/foo/../' with '/' */
+    $re = array('#(/\.?/)#', '#/(?!\.\.)[^/]+/\.\./#');
+    for($n=1; $n>0; $abs=preg_replace($re, '/', $abs, -1, $n)) {}
+
+    /* absolute URL is ready! */
+    return $scheme.'://'.$abs;
+}
+
+// $str=preg_replace('#(href|src)="([^:"]*)("|(?:(?:%20|\s|\+)[^"]*"))#','$1="http://wintermute.com.au/$2$3',$str);
+
+function absolutes_links($data, $base) {
+	// cherche les balises 'a' qui contiennent un href
+	$matches = array();
+	preg_match_all('#(href|src)="([^:"]*)("|(?:(?:%20|\s|\+)[^"]*"))#Si', $data, $matches, PREG_SET_ORDER);
+
+	// ne conserve que les liens ne commençant pas par un protocole « protocole:// » ni par une ancre « # »
+	foreach($matches as $i => $link) {
+		$link[1] = trim($link[1]);
+
+		if (!preg_match('#^(([a-z]+://)|(\#))#', $link[1]) ) {
+
+			$absolutePath=rel2abs($link[2],$base);
+
+			$data = str_replace($matches[$i][2], $absolutePath, $data);
+		}
+
+	}
+	return $data;
+}
+
+
+// FUNCTIONS END
+
+// EXUCUTION CODE
+
+
 if(isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
 	// get url link
 	if(strlen(trim($_GET['url'])) > 2048) {
@@ -109,13 +199,7 @@ if(isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
 			$r = new Readability($html, $url);
 
 			if($r->init()) {
-				// return innerhtml of article found
-				echo "<html><head><link rel='stylesheet' href='./css/reset.css' type='text/css' media='all' /><link rel='stylesheet' href='./css/typography.css' type='text/css' media='all' />";
-				echo "<title>".$r->articleTitle->innerHTML."</title>";
-				echo "</head><body><h1><a href='".$r->url."'>".$r->articleTitle->innerHTML."</a></h1>";
-				echo $r->articleContent->innerHTML;
-				echo "<br/><br/>Come From : <a href='".$r->url."'>".$r->url."</a>";
-				echo "</body></html>";
+				generate_page($url,$r->articleTitle->innerHTML,$r->articleContent->innerHTML);
 			} else {
 				// return data into an iframe
 				echo "<iframe id='readabilityframe'>".$html."</iframe>";
