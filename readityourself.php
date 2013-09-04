@@ -199,7 +199,8 @@ if(isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
 			$r = new Readability($html, $url);
 
 			if($r->init()) {
-				generate_page($url,$r->articleTitle->innerHTML,$r->articleContent->innerHTML);
+				generate_page($url,$r->articleTitle->innerHTML,absolutes_links($r->articleContent->innerHTML,$url));
+				//generate_page($url,$r->articleTitle->innerHTML,$r->articleContent->innerHTML);
 			} else {
 				// return data into an iframe
 				echo "<iframe id='readabilityframe'>".$html."</iframe>";

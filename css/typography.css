@@ -83,3 +83,16 @@ hr { margin-bottom:1.625em; }
 .oldbook { font-family:"Warnock Pro","Goudy Old Style","Book Antiqua","Palatino",Georgia,serif; }
 .note { font-family:Georgia, "Times New Roman", Times, serif; font-style:italic; font-size:0.9em; margin:0.1em; color:#333; } 
 .mono { font-family:"Courier New", Courier, monospace; }
+
+
+/* SPECIFIC */
+.lienGlossaire > span {
+   display: none;
+}
+
+.lienGlossaire:hover > span {
+   display: block;
+   color: grey;
+   font-size: 0.8em;
+   font-style: italic;
+}
