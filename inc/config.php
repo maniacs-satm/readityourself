@@ -1,11 +1,15 @@
 <?php
-define("VERSION", "0.0.5");
+define("VERSION", "0.0.6");
 
 define ('SAVED_PATH', 'saved/');
 define ('IMAGES_PATH', 'saved/images/');
 
+$gets = array('picdown','picb64','css','url');
+
+
 $PICTURES_DOWNLOAD = false;
 $PICTURES_BASE64 = true;
+$CSS_STYLE = null;
 
 // Annulation de la fonction magic_quotes_gpc.
 function strip_magic_quotes(&$valeur)

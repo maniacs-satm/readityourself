@@ -11,8 +11,6 @@ date_default_timezone_set('Europe/Paris');
 header('Content-Type: text/html;charset=utf-8');
 
 
-$gets = array('picdown','picb64','css','url');
-
 // get readability library
 require_once dirname(__FILE__).'/inc/config.php';
 
@@ -34,6 +32,10 @@ if(isset($_GET['picdown']) && $_GET['picdown'] != null) {
 
 if(isset($_GET['picb64']) && $_GET['picb64'] != null) {
     $PICTURES_BASE64 = $_GET['picb64'] == 'true';
+}
+
+if(isset($_GET['css']) && $_GET['css'] != null && file_exists('css/'.$_GET['css'].'.css')) {
+    $CSS_STYLE = 'css/'.$_GET['css'].'.css';
 }
 
 /**
@@ -137,26 +139,29 @@ function url(){
 }
 
 function generate_page($url,$title,$content) {
-    global $PICTURES_DOWNLOAD, $PICTURES_BASE64;
+    global $PICTURES_DOWNLOAD, $PICTURES_BASE64,$CSS_STYLE;
 
 	raintpl::$tpl_dir = './tpl/'; // template directory
 	raintpl::$cache_dir = "./cache/"; // cache directory
 	raintpl::$base_url = url(); // base URL of blog
 	raintpl::configure( 'path_replace', false );
-	raintpl::configure('debug', false); 
+	raintpl::configure('debug', true); 
 
 	$tpl = new raintpl(); //include Rain TPL
 
 	$tpl->assign( "url", $url);
 	$tpl->assign( "title", $title);
-    
+
+    if(isset($CSS_STYLE) && $CSS_STYLE != null) {
+        $tpl->assign( "style", $CSS_STYLE);
+    }
+
     if ($PICTURES_DOWNLOAD == true || $PICTURES_BASE64 == true) {
         $content = picture_filtre($content, $url);
     }
 
-    
+
 	$tpl->assign( "content", $content);
-	
 	$tpl->assign( "version", VERSION);
 	
 	$tpl->draw( "index"); // draw the template
