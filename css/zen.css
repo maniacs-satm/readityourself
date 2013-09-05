@@ -25,6 +25,7 @@ p {
 	margin-top: 0; 
 	text-align: justify;
 	}
+    
 h3 { 
 	font: italic normal 1.4em georgia, sans-serif;
 	letter-spacing: 1px; 
@@ -34,12 +35,12 @@ h3 {
 a:link { 
 	font-weight: bold; 
 	text-decoration: none; 
-	color: #B7A5DF;
+	color: #B7050F;
 	}
 a:visited { 
 	font-weight: bold; 
 	text-decoration: none; 
-	color: #D4CDDC;
+	color: #B7050F;
 	}
 a:hover, a:focus, a:active { 
 	text-decoration: underline; 
@@ -50,14 +51,14 @@ abbr {
 	}
 
 article {
-    margin: 1px;
+    margin: 1%;
 }
 
 footer { 
 	text-align: center; 
 	}
 footer a:link, footer a:visited { 
-	margin-right: 20px; 
+	margin-right: 3%; 
 	}
 
 
