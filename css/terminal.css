@@ -61,3 +61,14 @@ em, dfn {
     font-style: italic;
 }
 
+/* SPECIFIC */
+.lienGlossaire > span {
+   display: none;
+}
+
+.lienGlossaire:hover > span {
+   display: block;
+   color: grey;
+   font-size: 0.8em;
+   font-style: italic;
+}

@@ -17,7 +17,7 @@ body {
 	font: 75% georgia, sans-serif;
 	line-height: 1.88889;
 	color: #555753; 
-	background: #fff; 
+	background: #fff url(blossoms.jpg) no-repeat bottom right; 
 	margin: 0; 
 	padding: 0;
 	}
@@ -62,3 +62,14 @@ footer a:link, footer a:visited {
 	}
 
 
+/* SPECIFIC */
+.lienGlossaire > span {
+   display: none;
+}
+
+.lienGlossaire:hover > span {
+   display: block;
+   color: grey;
+   font-size: 0.8em;
+   font-style: italic;
+}
