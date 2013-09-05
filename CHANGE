@@ -1,0 +1,24 @@
+You can now help me on GitHub <a href="https://github.com/memiks/readityourself">sources</a>
+
+Thanks for all feedbacks, I will send you a mail ;)
+
+CHANGE: 
+	2013-09-05 : LOT OF CHANGE !!
+		* add <a href="https://github.com/memiks/readityourself">sources on github</a>
+		* add zen and terminal css
+		* Bookmarklet for <a href="javascript:(function(){var%20url%20=%20location.href;var%20title%20=%20document.title%20||%20url;window.open('<? echo url()?>/readityourself.php?url='%20+%20encodeURIComponent(url),'_self');})();" title="ReadItYourself">ReadItYourself</a> Coded by Tristan Velter for Read It Yourself (thanks ;) ) <a href="http://velter.org/">http://velter.org/</a>
+        * Use base64 encoding to include image in html page (to read it later with cache browser ;) )
+        * add option to URL in order to have css by default (css=terminal or css=zen)
+            bookmark terminal : <a href="javascript:(function(){var%20url%20=%20location.href;var%20title%20=%20document.title%20||%20url;window.open('<? echo url()?>/readityourself.php?css=terminal&url='%20+%20encodeURIComponent(url),'_self');})();" title="ReadItYourself">ReadItYourself Terminal</a>
+            bookmark zen : <a href="javascript:(function(){var%20url%20=%20location.href;var%20title%20=%20document.title%20||%20url;window.open('<? echo url()?>/readityourself.php?css=zen&url='%20+%20encodeURIComponent(url),'_self');})();" title="ReadItYourself">ReadItYourself Zen</a>
+		* Change Footer, code, version etc...
+        * and continue...
+
+CHANGE: 
+	2013-03-01 : 
+		* use cURL if php extension is present, otherwise use file_get_contents
+		* now ReadItYourself can handle URL forward
+		* Add a Bookmarklet for <a href="javascript:(function(){var%20url%20=%20location.href;var%20title%20=%20document.title%20||%20url;window.open('<? echo url()?>/readityourself.php?url='%20+%20encodeURIComponent(url),'_self');})();" title="ReadItYourself">ReadItYourself</a> Coded by Tristan Velter for Read It Yourself (thanks ;) ) <a href="http://velter.org/">http://velter.org/</a>
+		* use RainTPL to render html page
+		* add footer to put licence, where to find information about ReadItYourself and version number
+
