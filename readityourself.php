@@ -164,7 +164,7 @@ function generate_page($url,$title,$content) {
 	$tpl->assign( "content", $content);
 	$tpl->assign( "version", VERSION);
 	
-	$tpl->draw( "index"); // draw the template
+	$tpl->draw( "article"); // draw the template
 }
 
 // function define to retrieve url content
