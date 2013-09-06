@@ -113,9 +113,9 @@ class Session
             if ($login === $loginTest && $password === $passwordTest) {
                 self::banLoginOk();
                 // Generate unique random number to sign forms (HMAC)
-                $_SESSION['uid'] = sha1(uniqid('', true).'_'.mt_rand());
+                $_SESSION['uid'] = sha1(uniqid(preg_replace('#[^A-Za-z0-9]+#', '-', $login), true).'_'.mt_rand());
                 $_SESSION['ip'] = self::_allIPs();
-                $_SESSION['username'] = $login;
+                $_SESSION['username'] = preg_replace('#[^A-Za-z0-9]+#', '-', $login);
                 // Set session expiration.
                 $_SESSION['expires_on'] = time() + self::$inactivityTimeout;
 

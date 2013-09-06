@@ -1,11 +1,19 @@
 <?php
-define("VERSION", "0.0.6");
+define("VERSION", "0.0.7");
 
 define ('SAVED_PATH', 'saved/');
-define ('IMAGES_PATH', 'saved/images/');
+define ('TMP_PATH', 'tmp/');
+define ('IMAGES_PATH', 'images/');
 
-$gets = array('picdown','picb64','css','url');
+if(!is_dir('./'.SAVED_PATH)) {
+    mkdir('./'.SAVED_PATH, 0705);
+}
 
+if(!is_dir('./'.TMP_PATH)) {
+    mkdir('./'.TMP_PATH, 0705);
+}
+
+$gets = array('picdown','picb64','css','url','logout');
 
 $PICTURES_DOWNLOAD = false;
 $PICTURES_BASE64 = true;
@@ -40,3 +48,9 @@ foreach ($_GET as $name => $value)
 	}
 }
 unset($_REQUEST);
+
+function url(){
+  $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
+  return $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+}
+

@@ -1,18 +1,6 @@
 <?php
-
-header('Content-type:text/html; charset=utf-8');
-// Set locale to French
-setlocale(LC_ALL, 'fr_FR');
-
-// set timezone to Europe/Paris
-date_default_timezone_set('Europe/Paris');
-
-// set charset to utf-8 important since all pages will be transform to utf-8
-header('Content-Type: text/html;charset=utf-8');
-
-
-// get readability library
-require_once dirname(__FILE__).'/inc/config.php';
+// FUNCTIONS BEGIN
+require_once dirname(__FILE__).'/inc/includes.php';
 
 // get readability library
 require_once dirname(__FILE__).'/inc/Readability.php';
@@ -20,12 +8,7 @@ require_once dirname(__FILE__).'/inc/Readability.php';
 // get Encoding library.
 require_once dirname(__FILE__).'/inc/Encoding.php';
 
-// appel de la libraire RainTPL.
-require_once dirname(__FILE__).'/inc/rain.tpl.class.php';
-
 // FUNCTIONS BEGIN
-
-
 if(isset($_GET['picdown']) && $_GET['picdown'] != null) {
     $PICTURES_DOWNLOAD = $_GET['picdown'] == 'true';
 }
@@ -41,10 +24,10 @@ if(isset($_GET['css']) && $_GET['css'] != null && file_exists('css/'.$_GET['css'
 /**
  * On modifie les URLS des images dans le corps de l'article
  */
-function picture_filtre($content, $url)
+function picture_filtre($content, $url,$path)
 {
     global $PICTURES_DOWNLOAD, $PICTURES_BASE64;
-    
+
     $matches = array();
     preg_match_all('#<\s*(img)[^>]+src="([^"]*)"[^>]*>#Si', $content, $matches, PREG_SET_ORDER);
     foreach($matches as $i => $link)
@@ -54,7 +37,7 @@ function picture_filtre($content, $url)
         {
             $absolute_path = rel2abs($link[2],$url);
             $filename = basename(parse_url($absolute_path, PHP_URL_PATH));
-            $directory = create_assets_directory($url);
+            $directory = create_assets_directory($url,$path);
             $fullpath = $directory . '/' . $filename;
             if($PICTURES_DOWNLOAD) {
                 pictures_download($absolute_path, $fullpath);
@@ -72,9 +55,10 @@ function picture_filtre($content, $url)
 /**
  * Crée un répertoire de médias pour l'article
  */
-function create_assets_directory($url)
+function create_assets_directory($url,$path)
 {
-    $assets_path = IMAGES_PATH;
+    $assets_path = $path.'/'.IMAGES_PATH;
+
     if(!is_dir($assets_path)) {
         mkdir($assets_path, 0705);
     }
@@ -133,11 +117,6 @@ function pictures_download($absolute_path, $fullpath)
 }
 
 
-function url(){
-  $protocol = ($_SERVER['HTTPS'] && $_SERVER['HTTPS'] != "off") ? "https" : "http";
-  return $protocol . "://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-}
-
 function generate_page($url,$title,$content) {
     global $PICTURES_DOWNLOAD, $PICTURES_BASE64,$CSS_STYLE;
 
@@ -152,16 +131,28 @@ function generate_page($url,$title,$content) {
 	$tpl->assign( "url", $url);
 	$tpl->assign( "title", $title);
 
+    $tpl->assign( "isLogged", Session::isLogged());
+    if (Session::isLogged()) {
+        $tpl->assign( "username", $_SESSION['username']);
+        $tpl->assign( "logpage", "../log.php");
+        
+        if ($PICTURES_DOWNLOAD == true || $PICTURES_BASE64 == true) {
+            $content = picture_filtre($content, $url, SAVED_PATH.'/'.$_SESSION['username']);
+        }
+        
+    } else {
+        if ($PICTURES_DOWNLOAD == true || $PICTURES_BASE64 == true) {
+            $content = picture_filtre($content, $url, TMP_PATH);
+        }
+    }
+
     if(isset($CSS_STYLE) && $CSS_STYLE != null) {
         $tpl->assign( "style", $CSS_STYLE);
+    } else {
+        $tpl->assign( "style", null);
     }
 
-    if ($PICTURES_DOWNLOAD == true || $PICTURES_BASE64 == true) {
-        $content = picture_filtre($content, $url);
-    }
-
-
-	$tpl->assign( "content", $content);
+    $tpl->assign( "content", $content);
 	$tpl->assign( "version", VERSION);
 	
 	$tpl->draw( "article"); // draw the template
