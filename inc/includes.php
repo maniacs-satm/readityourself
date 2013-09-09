@@ -1,6 +1,7 @@
 <?php 
 // FUNCTIONS BEGIN
 require_once dirname(__FILE__).'/Session.php';
+require_once dirname(__FILE__).'/../class/User.php';
 // Personnalize PHP session name
 Session::$sessionName = 'readityourself'; // default is empty
 // If the user does not access any page within this time,

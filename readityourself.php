@@ -58,7 +58,6 @@ function picture_filtre($content, $url,$path)
 function create_assets_directory($url,$path)
 {
     $assets_path = $path.'/'.IMAGES_PATH;
-
     if(!is_dir($assets_path)) {
         mkdir($assets_path, 0705);
     }
