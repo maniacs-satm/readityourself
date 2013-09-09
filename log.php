@@ -15,7 +15,7 @@ if (isset($_GET['logout'])) {
     die();
 } else if (isset($_POST['login']) && isset($_POST['password'])) {
     $user = User::getUser('./conf/',$_POST['login']);
-    if($user && $user->getPassword() != null && Session::login($_POST['login'], md5($_POST['password']), $user->getLogin(), $user->getPassword())) {
+    if($user && $user->getPassword() != null && Session::login($_POST['login'], User::getHashPassword($_POST['password']), $user->getLogin(), $user->getPassword())) {
         if(Session::isLogged() && $_SESSION['username'] != null && !is_dir('./'.SAVED_PATH .'/'.$_SESSION['username']) ) {
             mkdir('./'.SAVED_PATH .'/'.$_SESSION['username'], 0705);
         }

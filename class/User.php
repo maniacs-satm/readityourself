@@ -49,6 +49,10 @@ class User
         }
     }
 
+    public static function getHashPassword($password) {
+        return md5($password);
+    }
+
     public static function getUser($path, $login) {
         if(file_exists($path.'/'.$login.'.user')) {
             // read user in path with login as filename
