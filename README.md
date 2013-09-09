@@ -4,7 +4,7 @@ readityourself
 To read the web without ads, comments, or tweets !
 
 Installation
-============
+------------
 
 * Install apache2, nginx or lighthttpd
 * Install PHP5+
@@ -14,12 +14,12 @@ Installation
 * Enjoy
 
 Login
-=====
+-----
 
 the demo user is demo/demo
 
 Contact
-=======
+-------
 
 for any feedback or question, just send me a mail at contact@memiks.fr or put question/issue on github.
 
