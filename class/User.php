@@ -56,8 +56,8 @@ class User
     public static function getUser($path, $login) {
         if(file_exists($path.'/'.$login.'.user')) {
             // read user in path with login as filename
-            $user = file_get_contents($path.'/'.$login.'.user');
-            return unserialize($user);
+            return unserialize(file_get_contents($path.'/'.$login.'.user'));
+
         } else {
             return false;
         }

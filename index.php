@@ -22,9 +22,38 @@ require_once dirname(__FILE__).'/inc/includes.php';
 				<input type="text" name="url" id="url" maxlength="2048" size="80" /><input type="submit">
 			</form>
 
+            
+            <?php
+                $publicArticles = Article::findPublicArticle();
+                if($publicArticles != null && count($publicArticles) >0) {
+            
+                    echo "Public articles by not connected users:<ul>";
+            
+                    foreach ($publicArticles as $article) {
+                        echo "<li><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></li>";
+                    }
+                    
+                    echo "</ul>";
+                }
+            ?>
+
+            <?php
+                    if (Session::isLogged()) {
+                        $articles = Article::findArticle($_SESSION['username']);
+                        if($articles != null && count($articles) >0) {
+            
+                            echo "<br>Your articles: <ul>";
+    
+                            foreach ($articles as $article) {
+                                echo "<li><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></li>";
+                            }
+                            
+                            echo "</ul>";
+                        }
+                    }
+            ?>
     		<?php echo file_get_contents("./CHANGE"); ?>
 			<?php echo file_get_contents("./LICENSE"); ?>
-							 
 		</pre>
 	</body>
 </html>
