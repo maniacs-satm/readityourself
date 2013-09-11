@@ -92,7 +92,7 @@ class Article {
     	if($this->getOriginal() != null and strlen($this->getOriginal()) > 0) {
 		
 			// send result to readability library
-			$readIt = new Readability($this->getOriginal(),$this->getUrl());
+			$readIt = new Readityourself($this->getOriginal(),$this->getUrl());
     		$this->loaded = $readIt->init();
             $this->setTitle($readIt->articleTitle->innerHTML);
             $this->setFinalContent($readIt->articleContent->innerHTML);
