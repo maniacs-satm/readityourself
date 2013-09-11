@@ -15,10 +15,12 @@ class Readityourself extends Readability {
 	* Defined up here so we don't instantiate them repeatedly in loops.
 	**/
 	public $regexps = array(
-		'unlikelyCandidates' => '/combx|community|disqus|extra|foot|header|menu|remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination|pager|popup|debutDefinition_/i',
-		'okMaybeItsACandidate' => '/and|comment|post|article|body|column|main|shadow/i',
-		'positive' => '/article|comment|comic|body|content|entry|hentry|main|page|media|attachment|pagination|post|text|blog|story/i',
-		'negative' => '/combx|com-|contact|foot|footer|_nav|footnote|masthead|meta|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|shopping|tags|tool|widget/i',
+		'unlikelyCandidates' => '/combx|community|comment|disqus|extra|foot|header|menu|remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination|pager|popup|debutDefinition_/i',
+		'okMaybeItsACandidate' => '/and|post|article|body|column|main|shadow/i',
+		'positive' => '/article|content|comic|body|content|entry|hentry|main|page|media|attachment|pagination|post|text|blog|story/i',
+		'negative' => '/combx|com-|contact|comment|foot|footer|_nav|footnote|masthead|meta|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|shopping|tags|tool|widget/i',
+        'htmlPositiveTag' => '/content|article|media|video/',
+        'htmlNegativeTag' => '/footer|header/',
 		'divToPElements' => '/<(a|blockquote|dl|div|img|ol|p|pre|table|ul|code)/i',
 		'replaceBrs' => '/(<br[^>]*>[ \n\r\t]*){2,}/i',
 		'replaceFonts' => '/<(\/?)font[^>]*>/i',
@@ -99,14 +101,21 @@ class Readityourself extends Readability {
 
 		$weight = 0;
 
+    	if (preg_match($this->regexps['negative'], $e->tagName)) {
+			$weight -= 250;
+		}
+		if (preg_match($this->regexps['positive'], $e->tagName)) {
+			$weight += 250;
+		}
+
     	/* Look for a special ID */
 		if ($e->hasAttribute('id') && $e->getAttribute('id') != '')
 		{
 			if (preg_match($this->regexps['negative'], $e->getAttribute('id'))) {
-				return $weight - 250;
+				$weight -= 150;
 			}
 			if (preg_match($this->regexps['positive'], $e->getAttribute('id'))) {
-				return $weight + 250;
+				$weight += 150;
 			}
 		}
 
@@ -114,10 +123,10 @@ class Readityourself extends Readability {
 		if ($e->hasAttribute('class') && $e->getAttribute('class') != '')
 		{
 			if (preg_match($this->regexps['negative'], $e->getAttribute('class'))) {
-				return $weight - 25;
+				$weight -= 25;
 			}
 			if (preg_match($this->regexps['positive'], $e->getAttribute('class'))) {
-				return $weight + 25;
+				$weight += 25;
 			}
 		}
 
