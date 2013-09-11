@@ -257,8 +257,6 @@ class Readability
 				$curTitle = preg_replace('/[^\|\-]*[\|\-](.*)/i', '$1', $origTitle);
 			}
 		}
-        // remove to correct split of title with ':' see https://github.com/memiks/readityourself/issues/1
-        /*
 		else if (strpos($curTitle, ': ') !== false)
 		{
 			$curTitle = preg_replace('/.*:(.*)/i', '$1', $origTitle);
@@ -267,7 +265,6 @@ class Readability
 				$curTitle = preg_replace('/[^:]*[:](.*)/i','$1', $origTitle);
 			}
 		}
-        */
 		else if(strlen($curTitle) > 150 || strlen($curTitle) < 15)
 		{
 			$hOnes = $this->dom->getElementsByTagName('h1');
