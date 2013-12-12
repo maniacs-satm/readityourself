@@ -52,8 +52,8 @@ require_once dirname(__FILE__).'/inc/includes.php';
                         }
                     }
             ?>
-    		<?php echo file_get_contents("./CHANGE"); ?>
-			<?php echo file_get_contents("./LICENSE"); ?>
+    		<?php include ("./CHANGE"); ?>
+			<?php include ("./LICENSE"); ?>
 		</pre>
 	</body>
 </html>

@@ -63,11 +63,12 @@ class Utils {
     	foreach($matches as $i => $link) {
     		$link[1] = trim($link[1]);
     
-    		if (!preg_match('#^(([a-z]+://)|(\#))#', $link[1]) ) {
-    
+    		//if (!preg_match('#^(([a-z]+://)|(\#))#', $link[1]) ) {
+    		if (!preg_match('%^((https?://)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%', $link[1]) 
+    		        && (strpos($matches[$i][2],'#') != 0) ) {
+            
     			$absolutePath=Utils::rel2abs($link[2],$base);
-    
-    			$data = str_replace($matches[$i][2], $absolutePath, $data);
+			    $data = str_replace($matches[$i][2], $absolutePath, $data);
     		}
     
     	}

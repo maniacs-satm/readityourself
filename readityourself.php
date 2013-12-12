@@ -81,6 +81,12 @@ if(isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
             }
         } else {
             $article = Article::getArticle($url);
+                    // only for debug
+/*                if($article->readiIt()) {
+                    $article->modifyContent();
+                    $article->saveContent();
+                }
+*/
         }
 
         if($article && $article->isLoaded()) {

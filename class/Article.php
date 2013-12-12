@@ -102,7 +102,7 @@ class Article {
 
     public function modifyContent() {
         global $PICTURES_DOWNLOAD, $PICTURES_BASE64;
-        //$this->setFinalContent(utils::absolutes_links($this->getFinalContent(),$this->getUrl()));
+        $this->setFinalContent(utils::absolutes_links($this->getFinalContent(),$this->getUrl()));
         if ($PICTURES_DOWNLOAD == true || $PICTURES_BASE64 == true) {
             $this->setFinalContent($this->picture_filtre($this->getFinalContent(), $this->getUrl()));
         }
