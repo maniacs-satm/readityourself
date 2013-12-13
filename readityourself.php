@@ -38,8 +38,8 @@ function generate_page($url,$title,$content) {
     $tpl->assign( "isLogged", Session::isLogged());
     if (Session::isLogged()) {
         $tpl->assign( "username", $_SESSION['username']);
-        $tpl->assign( "logpage", "../log.php");
     }
+        $tpl->assign( "logpage", "../log.php");
 
     if(isset($CSS_STYLE) && $CSS_STYLE != null) {
         $tpl->assign( "style", $CSS_STYLE);
