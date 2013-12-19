@@ -3,6 +3,9 @@ You can now help me on GitHub <a href="https://github.com/memiks/readityourself"
 Thanks for all feedbacks, I will send you a mail ;)
 
 CHANGE: 
+	2013-12-18 : Correct bug with absolute links resolution
+			Add Tiny Typo CSS from http://tinytypo.tetue.net
+			Change relative Links resolution, use DOM Xpath query
 	2013-09-05 : LOT OF CHANGE !!
 		* add <a href="https://github.com/memiks/readityourself">sources on github</a>
 		* add zen and terminal css
