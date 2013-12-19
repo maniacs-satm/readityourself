@@ -55,24 +55,37 @@ class Utils {
     }
     
     public static function absolutes_links($data, $base) {
-        // cherche les balises 'a' qui contiennent un href
-    	$matches = array();
-    	preg_match_all('#(href|src)="([^:"]*)("|(?:(?:%20|\s|\+)[^"]*"))#Si', $data, $matches, PREG_SET_ORDER);
+    	$doc = new DOMDocument('1.0', 'UTF-8');
+    	$doc->encoding = 'UTF-8';
+
+    	libxml_use_internal_errors(true);
+        $doc->loadHTML('<?xml encoding="UTF-8">' . $data);
+        libxml_use_internal_errors(false);
+
+        // cherche les balises qui contiennent un href ou un src
+        $doc = Utils::absolute_for_DOM_and_query($doc,'//*/@src | //*/@href', $base);
+        
+        return $doc->saveHTML();
+    }
     
-    	// ne conserve que les liens ne commençant pas par un protocole « protocole:// » ni par une ancre « # »
-    	foreach($matches as $i => $link) {
-    		$link[1] = trim($link[1]);
-    
-    		//if (!preg_match('#^(([a-z]+://)|(\#))#', $link[1]) ) {
-    		if (!preg_match('%^((https?://)|(www\.))([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%', $link[1]) 
-    		        && (strpos($matches[$i][2],'#') != 0) ) {
-            
-    			$absolutePath=Utils::rel2abs($link[2],$base);
-			    $data = str_replace($matches[$i][2], $absolutePath, $data);
-    		}
-    
-    	}
-    	return $data;
+    public static function absolute_for_DOM_and_query($doc,$query, $base){
+        $xpath = new DOMXPath($doc);
+        $entries = $xpath->query($query);
+
+        if($entries != null && count($entries)>0) {
+            foreach ($entries as $entry) {
+        		if (!preg_match('%^((http[s]?://)|(www\.)|(#))([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%', $entry->nodeValue)) {
+                
+        			$absolutePath=Utils::rel2abs($entry->nodeValue,$base);
+        			//echo "absolutePath={ ".$absolutePath." } origin={ ".$entry->nodeValue." }<br>\n";
+        			
+        			$entry->nodeValue = $absolutePath;
+    			    //$data = str_replace($entry->nodeValue, $absolutePath, $data);
+        		}
+            }
+        }
+        
+        return $doc;
     }
 
 
