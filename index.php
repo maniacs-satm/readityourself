@@ -6,6 +6,8 @@ require_once dirname(__FILE__).'/inc/includes.php';
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+		<link rel='stylesheet' href='inc/style.css' type='text/css' media='screen' />
+		<script src="inc/include.js"></script>
 	</head>
 	<body>
 <?php 
@@ -22,18 +24,23 @@ require_once dirname(__FILE__).'/inc/includes.php';
 				<input type="text" name="url" id="url" maxlength="2048" size="80" /><input type="submit">
 			</form>
 
-            
+            <table id="readityourself" summary="List of Read It Yourself Pages">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                
             <?php
                 $publicArticles = Article::findPublicArticle();
                 if($publicArticles != null && count($publicArticles) >0) {
             
-                    echo "Public articles by not connected users:<ul>";
-            
                     foreach ($publicArticles as $article) {
-                        echo "<li><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></li>";
+                        echo "<tr><th>".$article->getDate()."</th><td><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td></tr>";
                     }
                     
-                    echo "</ul>";
                 }
             ?>
 
@@ -42,18 +49,22 @@ require_once dirname(__FILE__).'/inc/includes.php';
                         $articles = Article::findArticle($_SESSION['username']);
                         if($articles != null && count($articles) >0) {
             
-                            echo "<br>Your articles: <ul>";
-    
                             foreach ($articles as $article) {
-                                echo "<li><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></li>";
+                                echo "<tr><th>".$article->getDate()."</th><td><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td></tr>";
                             }
                             
-                            echo "</ul>";
                         }
                     }
             ?>
+            </tbody>
+            </table>
     		<?php include ("./CHANGE"); ?>
 			<?php include ("./LICENSE"); ?>
 		</pre>
+		<script>
+		    window.onload = function() {
+				var sales = new TableSort("readityourself");
+			};
+		</script>
 	</body>
 </html>

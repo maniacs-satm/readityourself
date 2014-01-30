@@ -33,6 +33,7 @@ function generate_page($url,$title,$content) {
 	$tpl = new raintpl(); //include Rain TPL
 
 	$tpl->assign( "url", $url);
+	$tpl->assign( "tinyurl", md5($url));
 	$tpl->assign( "title", $title);
 
     $tpl->assign( "isLogged", Session::isLogged());
@@ -43,6 +44,7 @@ function generate_page($url,$title,$content) {
 
     if(isset($CSS_STYLE) && $CSS_STYLE != null) {
         $tpl->assign( "style", $CSS_STYLE);
+        $tpl->assign( "css" , $_GET['css']);
     } else {
         $tpl->assign( "style", null);
     }
@@ -63,11 +65,13 @@ if(isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
 	} else {
 		$url = trim($_GET['url']);
 
-		// decode it
-		$url = html_entity_decode($url);
-		
-		// if url use https protocol change it to http
-		if (!preg_match('!^https?://!i', $url)) $url = 'http://'.$url;
+        if(!Utils::isValidMd5($url)) {
+    		// decode it
+    		$url = html_entity_decode($url);
+    		
+    		// if url use https protocol change it to http
+    		if (!preg_match('!^https?://!i', $url)) $url = 'http://'.$url;
+        }
 
         $article = new Article;
         $article->setUrl($url);

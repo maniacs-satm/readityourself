@@ -3,6 +3,7 @@
 class Article {
     private $url = false;
     private $original;
+    private $date;
     private $title;
     private $readIt;
     private $finalContent;
@@ -23,6 +24,22 @@ class Article {
     
     public function setOriginal($original) {
         $this->original = base64_encode($original);
+    }
+
+    public function getDate() {
+        if(!isset($this->date)) {
+            if($this->isAlreadyExists()) {
+                $this->setDate(date("Y-m-d",filemtime(Utils::create_assets_directory($this->getUrl()).'/article.ser')));
+            } else {
+                $this->setDate(date("Y-m-d"));
+            }
+        }
+        return $this->date;
+    }
+
+    public function setDate($date) {
+        
+        $this->date = $date;
     }
 
     public function getFinalContent() {
@@ -96,6 +113,7 @@ class Article {
     		$this->loaded = $readIt->init();
             $this->setTitle($readIt->articleTitle->innerHTML);
             $this->setFinalContent($readIt->articleContent->innerHTML);
+            $this->setDate(date("Y-m-d"));
     	}
         return $this->loaded;
     }

@@ -18,12 +18,24 @@ class Utils {
             mkdir($path, 0705);
         }
 
-        $article_directory = $path . '/'. md5($url);
+        $article_directory = $path . '/';
+        if(Utils::isValidMd5($url)) {
+            $article_directory .= $url;
+        } else {
+            $article_directory .= md5($url);
+        }
+
         if(!is_dir($article_directory)) {
             mkdir($article_directory, 0705);
         }
     
         return $article_directory;
+    }
+
+    // validate if string is a MD5
+    public static function isValidMd5($md5 = '')
+    {
+        return preg_match('/^[a-f0-9]{32}$/', $md5);
     }
 
     /**
