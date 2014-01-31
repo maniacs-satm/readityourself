@@ -10,6 +10,8 @@ require_once dirname(__FILE__).'/inc/includes.php';
 		<script src="inc/include.js"></script>
 	</head>
 	<body>
+		<div class="header" class="marginauto">
+			<span>
 <?php 
 
     if (!Session::isLogged()) {
@@ -18,13 +20,19 @@ require_once dirname(__FILE__).'/inc/includes.php';
         ?>Hello <?php print $_SESSION['username']; ?>, you are logged in. <a href="log.php?logout">Logout</a><?
     }
 ?>
-		<pre>
-			Just put a URL here and type submit, Enjoy ;)
-			<form action="./readityourself.php">
-				<input type="text" name="url" id="url" maxlength="2048" size="80" /><input type="submit">
-			</form>
+			</span>
+		</div>
+		<div class="readityourselfform">
+			<span class="form fiftypercent">
+				Just put a URL here and type submit, Enjoy ;)
+				<form action="./readityourself.php">
+					<input type="text" name="url" id="url" maxlength="2048" size="80" /><input type="submit">
+				</form>
+			</span>
+		</div>
+		<div class="alreadyread">
 
-            <table id="readityourself" summary="List of Read It Yourself Pages">
+            <table id="readityourself" class="marginauto" summary="List of Read It Yourself Pages">
             <thead>
                 <tr>
                     <th>Date</th>
@@ -58,9 +66,21 @@ require_once dirname(__FILE__).'/inc/includes.php';
             ?>
             </tbody>
             </table>
-    		<?php include ("./CHANGE"); ?>
-			<?php include ("./LICENSE"); ?>
-		</pre>
+        </div>
+        <div class="changelog">
+        	<pre class="fiftypercent marginauto">
+	        	<code>
+	    			<?php include ("./CHANGE"); ?>
+				</code>
+    		</pre>
+		</div>
+        <div class="license">
+        	<pre class="fiftypercent marginauto">
+	        	<code>
+					<?php include ("./LICENSE"); ?>
+				</code>
+    		</pre>
+		</div>
 		<script>
 		    window.onload = function() {
 				var sales = new TableSort("readityourself");
