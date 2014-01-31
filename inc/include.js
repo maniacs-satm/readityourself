@@ -51,15 +51,22 @@
 					 * order of content is determined in order to actually reorder the HTML
 					 * table's rows.
 					 */
-					var num = content.replace(/(\$|\,|\s)/g, "");
-					  if (parseFloat(num) == num) { 
-						numeric[nIdx++] = {
-							value: Number(num),
-							row: rows[i]
-						}
+					if(content && String(content).length >= 0) {
+    					var num = content.replace(/(\$|\,|\s)/g, "");
+    					  if (parseFloat(num) == num) { 
+    						numeric[nIdx++] = {
+    							value: Number(num),
+    							row: rows[i]
+    						}
+    					} else {
+    						alpha[aIdx++] = {
+    							value: content,
+    							row: rows[i]
+    						}
+    					}
 					} else {
 						alpha[aIdx++] = {
-							value: content,
+							value: "",
 							row: rows[i]
 						}
 					}
