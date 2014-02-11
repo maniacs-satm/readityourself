@@ -15,18 +15,20 @@
 			TableSort.prototype.makeSortable = function () {
 				var headings = this.tbl.tHead.rows[0].cells;
 				for (var i=0; headings[i]; i++) {
-					headings[i].cIdx = i;
-					var a = document.createElement("a");
-						a.href = "#";
-						a.innerHTML = headings[i].innerHTML;
-						a.onclick = function (that) {
-							return function () {
-								that.sortCol(this);
-								return false;
-							}
-						}(this);
-					headings[i].innerHTML = "";
-					headings[i].appendChild(a);
+                    if(!headings[i].className.match(/notSortable/)) {
+                        headings[i].cIdx = i;
+                        var a = document.createElement("a");
+                        a.href = "#";
+                        a.innerHTML = headings[i].innerHTML;
+                        a.onclick = function (that) {
+                            return function () {
+                                that.sortCol(this);
+                                return false;
+                            }
+                        }(this);
+                        headings[i].innerHTML = "";
+                        headings[i].appendChild(a);
+                    }
 				}
 			}
 

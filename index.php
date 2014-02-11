@@ -37,6 +37,7 @@ require_once dirname(__FILE__).'/inc/includes.php';
                 <tr>
                     <th>Date</th>
                     <th>Title</th>
+                    <th class="notSortable">Url</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,7 +47,15 @@ require_once dirname(__FILE__).'/inc/includes.php';
                 if($publicArticles != null && count($publicArticles) >0) {
             
                     foreach ($publicArticles as $article) {
-                        echo "<tr><th>".$article->getDate()."</th><td><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td></tr>";
+                        echo "<tr><th>".$article->getDate()."</th>";
+                        echo "<td>".$article->getTitle()."</td>";
+
+                        echo "<td>";
+                        echo "<a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>Default</a>&nbsp;";
+                        echo "<a href='readityourself.php?url=".urlencode($article->getUrl())."&css=zen' title='".$article->getTitle()."'>Zen</a>&nbsp;";
+                        echo "<a href='readityourself.php?url=".urlencode($article->getUrl())."&css=terminal' title='".$article->getTitle()."'>Terminal</a>&nbsp;";
+                        echo "<a href='readityourself.php?url=".urlencode($article->getUrl())."&css=tinytypo' title='".$article->getTitle()."'>Tinytypo</a>&nbsp;";
+                        echo "</td></tr>";
                     }
                     
                 }
