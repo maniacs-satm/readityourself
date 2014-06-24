@@ -17,7 +17,7 @@ require_once dirname(__FILE__).'/inc/includes.php';
     if (!Session::isLogged()) {
         ?><a href="log.php" title="Login page">login page</a><?php
     } else {
-        ?>Hello <?php print $_SESSION['username']; ?>, you are logged in. <a href="log.php?logout">Logout</a><?
+        ?>Hello <?php print $_SESSION['username']; ?>, you are logged in. <a href="log.php?logout">Logout</a><?php
     }
 ?>
 			</span>
@@ -67,7 +67,8 @@ require_once dirname(__FILE__).'/inc/includes.php';
                         if($articles != null && count($articles) >0) {
             
                             foreach ($articles as $article) {
-                                echo "<tr><th>".$article->getDate()."</th><td><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td></tr>";
+                                echo "<tr><th>".$article->getDate()."</th><td><a href='readityourself.php?
+                                url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td></tr>";
                             }
                             
                         }

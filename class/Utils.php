@@ -111,7 +111,7 @@ class Utils {
     		$curl = curl_init();
     		curl_setopt($curl, CURLOPT_URL, $url);
     		curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-    		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+//    		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
     		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     		curl_setopt($curl, CURLOPT_HEADER, false);
     		 
@@ -130,10 +130,12 @@ class Utils {
     	} else {
     
     		// create http context and add timeout and user-agent
-    		$context = stream_context_create(array('http'=>array('timeout' => $timeout, // Timeout : time until we stop waiting for the response.
-    																					'header'=> "User-Agent: ".$useragent, // spoot Mozilla Firefox
-    																					'follow_location' => true
-    														)));
+    		$context = stream_context_create(
+    						array('http'=>
+    								array('timeout' => $timeout, // Timeout : time until we stop waiting for the response.
+											'header'=> "User-Agent: ".$useragent, // spoot Mozilla Firefox
+											'follow_location' => true
+									)));
     
     		// only download page lesser than 4MB
     		$data = @file_get_contents($url, false, $context, -1, 4000000); // We download at most 4 MB from source.
