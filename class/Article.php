@@ -162,9 +162,9 @@ class Article {
         return $content;
     }
 
-    public static function findPublicArticle() {
-        return Article::findArticle("public");
-    }
+//    public static function findPublicArticle() {
+//        return Article::findArticle("public");
+//    }
 
     public static function findArticle($pattern) {
         $items = glob("./".SAVED_PATH.$pattern."/*/article.ser");

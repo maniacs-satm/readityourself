@@ -84,6 +84,7 @@ require_once dirname(__FILE__).'/inc/includes.php';
 						            <tbody>
 						                
 						            <?php
+						            /*
 						                $publicArticles = Article::findPublicArticle();
 						                if($publicArticles != null && count($publicArticles) >0) {
 						            
@@ -95,6 +96,7 @@ require_once dirname(__FILE__).'/inc/includes.php';
 						                    }
 						                    
 						                }
+						            */
 						            ?>
 						
 						            <?php

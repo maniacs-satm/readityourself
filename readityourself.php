@@ -52,9 +52,6 @@ function generate_page($url,$title,$content) {
 	$tpl->draw( "article"); // draw the template
 }
 
-// $str=preg_replace('#(href|src)="([^:"]*)("|(?:(?:%20|\s|\+)[^"]*"))#','$1="http://wintermute.com.au/$2$3',$str);
-
-
 if(isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
 	// get url link
 	if(strlen(trim($_GET['url'])) > 2048) {
@@ -73,23 +70,23 @@ if(isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
         $article = new Article;
         $article->setUrl($url);
 
-        if(!$article->isAlreadyExists()) {
+//        if(!$article->isAlreadyExists()) {
             if($article->retrieveContent()) {
                 if($article->readiIt()) {
                     $article->modifyContent();
-                    $article->saveContent();
+                    //$article->saveContent();
                 }
             }
+/*
         } else {
             $article = Article::getArticle($url);
                     // only for debug
-/*
                 if($article->readiIt()) {
                     $article->modifyContent();
                     $article->saveContent();
                 }
-*/
         }
+*/
 
         if($article && $article->isLoaded()) {
 				generate_page($article->getUrl(),$article->getTitle(),$article->getFinalContent());
