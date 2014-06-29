@@ -3,6 +3,7 @@ readityourself
 
 To read the web without ads, comments, or tweets !
 
+=======
 Use code from https://bitbucket.org/fivefilters/php-readability/src
 and adapt it to archive the web without ads/script/like and other bad things.
 

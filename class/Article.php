@@ -3,6 +3,7 @@
 class Article {
     private $url = false;
     private $original;
+    private $date;
     private $title;
     private $readIt;
     private $finalContent;
@@ -23,6 +24,22 @@ class Article {
     
     public function setOriginal($original) {
         $this->original = base64_encode($original);
+    }
+
+    public function getDate() {
+        if(!isset($this->date)) {
+            if($this->isAlreadyExists()) {
+                $this->setDate(date("Y-m-d",filemtime(Utils::create_assets_directory($this->getUrl()).'/article.ser')));
+            } else {
+                $this->setDate(date("Y-m-d"));
+            }
+        }
+        return $this->date;
+    }
+
+    public function setDate($date) {
+        
+        $this->date = $date;
     }
 
     public function getFinalContent() {
@@ -96,6 +113,7 @@ class Article {
     		$this->loaded = $readIt->init();
             $this->setTitle($readIt->articleTitle->innerHTML);
             $this->setFinalContent($readIt->articleContent->innerHTML);
+            $this->setDate(date("Y-m-d"));
     	}
         return $this->loaded;
     }
@@ -103,14 +121,8 @@ class Article {
     public function modifyContent() {
         global $PICTURES_DOWNLOAD, $PICTURES_BASE64;
         $this->setFinalContent(utils::absolutes_links($this->getFinalContent(),$this->getUrl()));
-        if (Session::isLogged()) {
-            if ($PICTURES_DOWNLOAD == true || $PICTURES_BASE64 == true) {
-                $this->setFinalContent($this->picture_filtre($this->getFinalContent(), $this->getUrl()));
-            }
-        } else {
-            if ($PICTURES_DOWNLOAD == true || $PICTURES_BASE64 == true) {
-                $this->setFinalContent($this->picture_filtre($this->getFinalContent(), $this->getUrl()));
-            }
+        if ($PICTURES_DOWNLOAD == true || $PICTURES_BASE64 == true) {
+            $this->setFinalContent($this->picture_filtre($this->getFinalContent(), $this->getUrl()));
         }
     }
 
@@ -150,9 +162,9 @@ class Article {
         return $content;
     }
 
-    public static function findPublicArticle() {
-        return Article::findArticle("public");
-    }
+//    public static function findPublicArticle() {
+//        return Article::findArticle("public");
+//    }
 
     public static function findArticle($pattern) {
         $items = glob("./".SAVED_PATH.$pattern."/*/article.ser");

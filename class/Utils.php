@@ -18,12 +18,24 @@ class Utils {
             mkdir($path, 0705);
         }
 
-        $article_directory = $path . '/'. md5($url);
+        $article_directory = $path . '/';
+        if(Utils::isValidMd5($url)) {
+            $article_directory .= $url;
+        } else {
+            $article_directory .= md5($url);
+        }
+
         if(!is_dir($article_directory)) {
             mkdir($article_directory, 0705);
         }
     
         return $article_directory;
+    }
+
+    // validate if string is a MD5
+    public static function isValidMd5($md5 = '')
+    {
+        return preg_match('/^[a-f0-9]{32}$/', $md5);
     }
 
     /**
@@ -55,23 +67,37 @@ class Utils {
     }
     
     public static function absolutes_links($data, $base) {
-        // cherche les balises 'a' qui contiennent un href
-    	$matches = array();
-    	preg_match_all('#(href|src)="([^:"]*)("|(?:(?:%20|\s|\+)[^"]*"))#Si', $data, $matches, PREG_SET_ORDER);
+    	$doc = new DOMDocument('1.0', 'UTF-8');
+    	$doc->encoding = 'UTF-8';
+
+    	libxml_use_internal_errors(true);
+        $doc->loadHTML('<?xml encoding="UTF-8">' . $data);
+        libxml_use_internal_errors(false);
+
+        // cherche les balises qui contiennent un href ou un src
+        $doc = Utils::absolute_for_DOM_and_query($doc,'//*/@src | //*/@href', $base);
+        
+        return $doc->saveHTML();
+    }
     
-    	// ne conserve que les liens ne commençant pas par un protocole « protocole:// » ni par une ancre « # »
-    	foreach($matches as $i => $link) {
-    		$link[1] = trim($link[1]);
-    
-    		if (!preg_match('#^(([a-z]+://)|(\#))#', $link[1]) ) {
-    
-    			$absolutePath=Utils::rel2abs($link[2],$base);
-    
-    			$data = str_replace($matches[$i][2], $absolutePath, $data);
-    		}
-    
-    	}
-    	return $data;
+    public static function absolute_for_DOM_and_query($doc,$query, $base){
+        $xpath = new DOMXPath($doc);
+        $entries = $xpath->query($query);
+
+        if($entries != null && count($entries)>0) {
+            foreach ($entries as $entry) {
+        		if (!preg_match('%^((http[s]?://)|(www\.)|(#))([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%', $entry->nodeValue)) {
+                
+        			$absolutePath=Utils::rel2abs($entry->nodeValue,$base);
+        			//echo "absolutePath={ ".$absolutePath." } origin={ ".$entry->nodeValue." }<br>\n";
+        			
+        			$entry->nodeValue = $absolutePath;
+    			    //$data = str_replace($entry->nodeValue, $absolutePath, $data);
+        		}
+            }
+        }
+        
+        return $doc;
     }
 
 
@@ -85,7 +111,7 @@ class Utils {
     		$curl = curl_init();
     		curl_setopt($curl, CURLOPT_URL, $url);
     		curl_setopt($curl, CURLOPT_TIMEOUT, $timeout);
-    		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+//    		curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
     		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
     		curl_setopt($curl, CURLOPT_HEADER, false);
     		 
@@ -104,10 +130,12 @@ class Utils {
     	} else {
     
     		// create http context and add timeout and user-agent
-    		$context = stream_context_create(array('http'=>array('timeout' => $timeout, // Timeout : time until we stop waiting for the response.
-    																					'header'=> "User-Agent: ".$useragent, // spoot Mozilla Firefox
-    																					'follow_location' => true
-    														)));
+    		$context = stream_context_create(
+    						array('http'=>
+    								array('timeout' => $timeout, // Timeout : time until we stop waiting for the response.
+											'header'=> "User-Agent: ".$useragent, // spoot Mozilla Firefox
+											'follow_location' => true
+									)));
     
     		// only download page lesser than 4MB
     		$data = @file_get_contents($url, false, $context, -1, 4000000); // We download at most 4 MB from source.

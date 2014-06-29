@@ -33,18 +33,17 @@ function generate_page($url,$title,$content) {
 	$tpl = new raintpl(); //include Rain TPL
 
 	$tpl->assign( "url", $url);
+	$tpl->assign( "tinyurl", md5($url));
 	$tpl->assign( "title", $title);
 
     $tpl->assign( "isLogged", Session::isLogged());
     if (Session::isLogged()) {
         $tpl->assign( "username", $_SESSION['username']);
-        $tpl->assign( "logpage", "../log.php");
-    }
-
-    if(isset($CSS_STYLE) && $CSS_STYLE != null) {
-        $tpl->assign( "style", $CSS_STYLE);
+        $tpl->assign( "logpage", "./log.php?logout");
+        $tpl->assign( "logname", "Logout");
     } else {
-        $tpl->assign( "style", null);
+        $tpl->assign( "logpage", "./log.php");
+        $tpl->assign( "logname", "Login");
     }
 
     $tpl->assign( "content", $content);
@@ -53,9 +52,6 @@ function generate_page($url,$title,$content) {
 	$tpl->draw( "article"); // draw the template
 }
 
-// $str=preg_replace('#(href|src)="([^:"]*)("|(?:(?:%20|\s|\+)[^"]*"))#','$1="http://wintermute.com.au/$2$3',$str);
-
-
 if(isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
 	// get url link
 	if(strlen(trim($_GET['url'])) > 2048) {
@@ -63,25 +59,34 @@ if(isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
 	} else {
 		$url = trim($_GET['url']);
 
-		// decode it
-		$url = html_entity_decode($url);
-		
-		// if url use https protocol change it to http
-		if (!preg_match('!^https?://!i', $url)) $url = 'http://'.$url;
+        if(!Utils::isValidMd5($url)) {
+    		// decode it
+    		$url = html_entity_decode($url);
+    		
+    		// if url use https protocol change it to http
+    		if (!preg_match('!^https?://!i', $url)) $url = 'http://'.$url;
+        }
 
         $article = new Article;
         $article->setUrl($url);
 
-        if(!$article->isAlreadyExists()) {
+//        if(!$article->isAlreadyExists()) {
             if($article->retrieveContent()) {
+                if($article->readiIt()) {
+                    $article->modifyContent();
+                    //$article->saveContent();
+                }
+            }
+/*
+        } else {
+            $article = Article::getArticle($url);
+                    // only for debug
                 if($article->readiIt()) {
                     $article->modifyContent();
                     $article->saveContent();
                 }
-            }
-        } else {
-            $article = Article::getArticle($url);
         }
+*/
 
         if($article && $article->isLoaded()) {
 				generate_page($article->getUrl(),$article->getTitle(),$article->getFinalContent());

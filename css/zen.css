@@ -51,7 +51,9 @@ abbr {
 	}
 
 article {
-    margin: 1%;
+    border: 1px solid #808080;
+    margin: 1em;
+    padding: 1em;
 }
 
 footer { 

@@ -3,6 +3,30 @@ You can now help me on GitHub <a href="https://github.com/memiks/readityourself"
 Thanks for all feedbacks, I will send you a mail ;)
 
 CHANGE: 
+    2014-01-31 : Commit log from git:
+        * Correct issue on table sorter when content in null or undefined
+        * Add gif image for table sorter
+        * Add style.css and include.js for index page
+        * Add table with style on index to display already saved article Add found article from md5 of URL (to reduce size of URL) Add date of article
+        * Change relative links resolution to DOM Xpath query
+        * Change relative links resolution, use DOM Xpath query
+        * Move code to add log page on article view
+        * Add margin and border to Zen style
+        * Remove absolute links due to bug
+        * Improve Readability by add html5 tags
+        * Improve Readability by add tags and modify id weight
+        * Fixes #1 : extend Readability.php into Readityourself.php classes to change behavior of getArticleTitle()
+        * Fixes #1 : extend Readability.php into Readityourself.php classes to change behavior of getArticleTitle()
+        * correct issue 1 on github: do not split title with ":"
+        * Add class, move code, add save or article and view on index...
+        * Add function to hash password in User.php
+        * Check user/pass from disk (in conf/demo.user file) with md5 (login/pass demo/demo)
+        * Add specific css for techno-science...
+        * Remove image on background
+
+	2013-12-18 : Correct bug with absolute links resolution
+			Add Tiny Typo CSS from http://tinytypo.tetue.net
+			Change relative Links resolution, use DOM Xpath query
 	2013-09-05 : LOT OF CHANGE !!
 		* add <a href="https://github.com/memiks/readityourself">sources on github</a>
 		* add zen and terminal css
@@ -13,8 +37,6 @@ CHANGE:
             bookmark zen : <a href="javascript:(function(){var%20url%20=%20location.href;var%20title%20=%20document.title%20||%20url;window.open('<? echo url()?>/readityourself.php?css=zen&url='%20+%20encodeURIComponent(url),'_self');})();" title="ReadItYourself">ReadItYourself Zen</a>
 		* Change Footer, code, version etc...
         * and continue...
-
-CHANGE: 
 	2013-03-01 : 
 		* use cURL if php extension is present, otherwise use file_get_contents
 		* now ReadItYourself can handle URL forward
