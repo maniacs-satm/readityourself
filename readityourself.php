@@ -39,14 +39,11 @@ function generate_page($url,$title,$content) {
     $tpl->assign( "isLogged", Session::isLogged());
     if (Session::isLogged()) {
         $tpl->assign( "username", $_SESSION['username']);
-    }
-        $tpl->assign( "logpage", "../log.php");
-
-    if(isset($CSS_STYLE) && $CSS_STYLE != null) {
-        $tpl->assign( "style", $CSS_STYLE);
-        $tpl->assign( "css" , $_GET['css']);
+        $tpl->assign( "logpage", "./log.php?logout");
+        $tpl->assign( "logname", "Logout");
     } else {
-        $tpl->assign( "style", null);
+        $tpl->assign( "logpage", "./log.php");
+        $tpl->assign( "logname", "Login");
     }
 
     $tpl->assign( "content", $content);

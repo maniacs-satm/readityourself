@@ -1,14 +1,11 @@
 <html>
-	{include="header"}
-	<body>
-		<article>
-			<h1><a href="{$url}">{$title}</a></h1>
-			<h2><a href="readityourself.php?css={$css}&url={$tinyurl}">Tiny URL to This ReadItYourself</a></h2>
-			<div id="readityourselfcontent">
-				{$content}
-			</div>
-			<span class="comeFrom">Come From : <a href="{$url}">{$url}</a>
-		</article>
+{include="header"}
+<h1><a href="{$url}">{$title}</a></h1>
+<a href="readityourself.php?url={$tinyurl}">Tiny URL to This ReadItYourself</a>
+<div id="readityourselfcontent">
+	{$content}
+</div>
+<span class="comeFrom">Come From : <a href="{$url}">{$url}</a>
 		{include="footer"}
-	</body>
+</body>
 </html>
