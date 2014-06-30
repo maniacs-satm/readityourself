@@ -205,6 +205,9 @@ section > :last-child, .last-child {
     font-family: times new roman;
     font-style: italic;
 }
+#content section {
+    background-color: white;
+}
 #copyright {
 	color: #000;
 }
