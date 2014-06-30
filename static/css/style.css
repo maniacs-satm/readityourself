@@ -195,6 +195,16 @@ section > :last-child, .last-child {
 	color: darkblue;
 	margin: 0 0 15px;
 }
+#content h1,
+#content h2,
+#content h3,
+#content h4,
+#content h5,
+#content h6 {
+    color: darkblue;
+    font-family: times new roman;
+    font-style: italic;
+}
 #copyright {
 	color: #000;
 }
