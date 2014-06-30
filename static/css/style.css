@@ -172,6 +172,15 @@ section > :last-child, .last-child {
 	background-image: -o-linear-gradient(top, #ce1a00, #ed391b);
 	background-image: linear-gradient(top, #ce1a00, #ed391b);
 }
+#content {
+    font-family: sans-serif,serif;
+    color: black;
+}
+#content pre,
+#content blockquote,
+#content code {
+    font-family: monospace;
+}
 #content .title, #content a {
 	font-style: bold;
 	font-family: arial;
