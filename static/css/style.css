@@ -176,6 +176,12 @@ section > :last-child, .last-child {
     font-family: sans-serif,serif;
     color: black;
 }
+
+#content p {
+    text-align: justify;
+    text-align-last: left;
+}
+
 #content pre,
 #content blockquote,
 #content code {
