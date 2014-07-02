@@ -86,18 +86,25 @@ class Utils {
 
         if($entries != null && count($entries)>0) {
             foreach ($entries as $entry) {
-        		if (!preg_match('%^((http[s]?://)|(www\.)|(#))([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%', $entry->nodeValue)) {
-                
-        			$absolutePath=Utils::rel2abs($entry->nodeValue,$base);
-        			//echo "absolutePath={ ".$absolutePath." } origin={ ".$entry->nodeValue." }<br>\n";
-        			
-        			$entry->nodeValue = $absolutePath;
-    			    //$data = str_replace($entry->nodeValue, $absolutePath, $data);
-        		}
+                $entry->nodeValue = Utils::absolute_for_entry($entry->nodeValue, $base);
             }
         }
         
         return $doc;
+    }
+    
+    public static function absolute_for_entry($nodevalue,$base) {
+        if (!preg_match('%^((http[s]?://)|(www\.)|(#))([a-z0-9-].?)+(:[0-9]+)?(/.*)?$%', $nodevalue)) {
+
+                $absolutePath=Utils::rel2abs($nodevalue,$base);
+
+                if(strpos($absolutePath,"&") >= 0) {
+                    $absolutePath = str_replace("&", "&amp;", str_replace("&amp;", "&", $absolutePath));
+                }
+
+                return $absolutePath;
+        }
+        return $nodevalue;
     }
 
 
