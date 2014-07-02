@@ -65,6 +65,9 @@ require_once dirname(__FILE__).'/inc/includes.php';
 											<input type="text" name="url" id="url" maxlength="2048" size="80" /><input type="submit">
 										</form>
 									</span>
+                                                                    
+                                                                    Or drag and drop this link to your bookmark and <br>
+                                                                        click on it on the page you want to <a href="javascript:(function(){var%20url%20=%20location.href;var%20title%20=%20document.title%20||%20url;window.open('<?=url()?>readityourself.php?&url='%20+%20encodeURIComponent(url),'_self');})();" title="Read It Yourself">Read It Yourself</a>
 								</section>
 							</div>
 						</div>
