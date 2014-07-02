@@ -19,6 +19,7 @@ $content = file_get_contents ($_GET['page']);
 
 $content = str_replace ("{{{year}}}", date("Y"), $content);
 $content = str_replace ("{{{fullname}}}", "Mémîks", $content);
+$content = str_replace ("\n", "<br>", $content);
 
 raintpl::$tpl_dir = './tpl/'; // template directory
 raintpl::$cache_dir = "./cache/"; // cache directory
