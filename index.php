@@ -72,6 +72,25 @@ require_once dirname(__FILE__).'/inc/includes.php';
 							</div>
 						</div>
 					</div>
+                            <?php
+                            /*
+                                $publicArticles = Article::findPublicArticle();
+                                if($publicArticles != null && count($publicArticles) >0) {
+
+                                    foreach ($publicArticles as $article) {
+                                        echo "<tr><th>".$article->getDate()."</th>";
+                                        echo "<td><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td>";
+
+                                        echo "</tr>";
+                                    }
+
+                                }
+                            */
+                            ?>
+
+                            <?php
+                                    if (Session::isLogged()) {
+                                        ?>
 					<div class="container">
 						<div class="row">
 							<div class="9u">
@@ -85,42 +104,32 @@ require_once dirname(__FILE__).'/inc/includes.php';
 						                </tr>
 						            </thead>
 						            <tbody>
-						                
-						            <?php
-						            /*
-						                $publicArticles = Article::findPublicArticle();
-						                if($publicArticles != null && count($publicArticles) >0) {
-						            
-						                    foreach ($publicArticles as $article) {
-						                        echo "<tr><th>".$article->getDate()."</th>";
-						                        echo "<td><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td>";
-						
-						                        echo "</tr>";
-						                    }
-						                    
-						                }
-						            */
-						            ?>
-						
-						            <?php
-						                    if (Session::isLogged()) {
-						                        $articles = Article::findArticle($_SESSION['username']);
-						                        if($articles != null && count($articles) >0) {
-						            
-						                            foreach ($articles as $article) {
-						                                echo "<tr><th>".$article->getDate()."</th><td><a href='readityourself.php?
-						                                url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td></tr>";
-						                            }
-						                            
-						                        }
-						                    }
-						            ?>
-						            </tbody>
-						            </table>
+                                <?php
+                                $articles = Article::findArticle($_SESSION['username']);
+                                if($articles != null && count($articles) >0) {
+
+                                    foreach ($articles as $article) {
+                                        echo "<tr><th>".$article->getDate()."</th><td><a href='readityourself.php?
+                                        url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td></tr>";
+                                    }
+
+                                }
+                                ?>
+                                                            </tbody>
+                                                            </table>
 								</section>
 							</div>
 						</div>
 					</div>
+                                        <script>
+                                            window.onload = function() {
+                                                        var sales = new TableSort("readityourself");
+                                                };
+                                        </script>
+                                <?php
+                                        }
+                                ?>
+
 				</div>
 			</div>
 			<div id="copyright">
@@ -134,10 +143,5 @@ require_once dirname(__FILE__).'/inc/includes.php';
 				</footer>
 			</div>
 		</div>
-		<script>
-		    window.onload = function() {
-				var sales = new TableSort("readityourself");
-			};
-		</script>
 	</body>
 </html>
