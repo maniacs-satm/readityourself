@@ -11,6 +11,11 @@
 /*********************************************************************************/
 
 /* Basic */
+
+* {
+    padding: 0;
+    margin: 0;
+}
  body {
 	background: #D4D9DD url('images/bg03.jpg');
 }
@@ -217,4 +222,10 @@ section > :last-child, .last-child {
 .codehilite {
 	border: 2px solid lightgrey;
 	font-family: arial;
+}
+img { /* set relative picture size */
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: auto;
 }
