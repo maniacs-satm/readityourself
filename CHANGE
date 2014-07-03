@@ -1,3 +1,12 @@
+This changelog is auto-generated using git-changelog.
+See https://github.com/lkdjiin/git-changelog for more information.
+
+* 2014-07-03 Add version in index Remove marge on right side Add debug parameter Try to manage bad formatted html  
+* 2014-07-02 Correct all entities to XHTML format Format code.  
+* 2014-07-02 Remove error when html value contains &#39;&amp;&#39;. Add new function to handle nodevalue change for one entry  
+* 2014-07-02 To not create empty tab when user is not logged.  
+* 2014-07-02 Update Change log  
+* 2014-07-02 Update Change log  
 * 2014-07-02 Add the bookmark.  
 * 2014-07-02 Change License from WTF to MIT  
 * 2014-07-02 Delete unecessary picture  
@@ -21,7 +30,7 @@
 * 2014-06-29 remove old code already in header.html template  
 * 2014-06-24 Just correct some issue on index rendering and curl url retrieving  
 * 2014-02-11 Add possibility to display article directly in other CSS  
-* 2014-01-31 Add style to index  Change changelogs  Remove cache and saved folder on git  
+* 2014-01-31  Add style to index  Change changelogs  Remove cache and saved folder on git  
 * 2014-01-31 Add style to index Change changelogs Remove cache and saved folder on git  
 * 2014-01-31 Correct issue on table sorter when content in null or undefined  
 * 2014-01-31 Add gif image for table sorter  
