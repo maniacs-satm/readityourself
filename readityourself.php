@@ -70,23 +70,21 @@ if(isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
         $article = new Article;
         $article->setUrl($url);
 
-//        if(!$article->isAlreadyExists()) {
+        if(!$article->isAlreadyExists()) {
             if($article->retrieveContent()) {
-                if($article->readiIt()) {
-                    $article->modifyContent();
-                    //$article->saveContent();
-                }
-            }
-/*
-        } else {
-            $article = Article::getArticle($url);
-                    // only for debug
-                if($article->readiIt()) {
+                if($article->readiIt(isset($_GET['debug']))) {
                     $article->modifyContent();
                     $article->saveContent();
                 }
+            }
+        } else {
+            $article = Article::getArticle($url);
+            // only for debug
+            if($article->readiIt(isset($_GET['debug']))) {
+                $article->modifyContent();
+                $article->saveContent();
+            }
         }
-*/
 
         if($article && $article->isLoaded()) {
 				generate_page($article->getUrl(),$article->getTitle(),$article->getFinalContent());

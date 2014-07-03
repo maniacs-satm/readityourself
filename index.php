@@ -2,6 +2,7 @@
 // FUNCTIONS BEGIN
 require_once dirname(__FILE__).'/inc/includes.php';
 
+require_once dirname(__FILE__).'/inc/config.php';
 ?>
 <html>
 	<head>
@@ -137,7 +138,7 @@ require_once dirname(__FILE__).'/inc/includes.php';
 					<div>
 						&copy; Copyright 2014 - <a href="http://www.memiks.fr/">memiks.fr</a> | <a href="http://shaarli.memiks.fr/">Liens</a> / <a href="http://rss.memiks.fr/">RSS</a> / <a href="http://wiki.memiks.fr/">Wiki</a> / <a href="mailto:&#109;&#101;&#109;&#105;&#107;&#115;&#064;&#109;&#101;&#109;&#105;&#107;&#115;&#046;&#102;&#114;">Contact</a>
 						<br>Licence: MIT License
-						<br>More information HERE: <a href="http://www.readityourself.net/">http://www.readityourself.net/</a> Version : <span class="version">{$version}</span>
+						<br>More information HERE: <a href="http://www.readityourself.net/">http://www.readityourself.net/</a> Version : <span class="version"><?=VERSION?></span>
 						<a href="https://github.com/memiks/readityourself">sources on github</a> | Design: <a href="http://html5up.net">HTML5 UP</a> | Images: <a href="http://fotogrph.com">fotogrph</a>
 					</div>
 				</footer>

@@ -13,7 +13,7 @@ if(!is_dir('./'.TMP_PATH)) {
     mkdir('./'.TMP_PATH, 0705);
 }
 
-$gets = array('picdown','picb64','css','url','logout','page');
+$gets = array('picdown','picb64','css','url','logout','page','debug');
 
 $PICTURES_DOWNLOAD = false;
 $PICTURES_BASE64 = true;
