@@ -113,6 +113,7 @@ class Readityourself extends Readability {
             }
         }
 
+        $classes = explode(" ", $e->getAttribute('class'));
         /* Look for a special classname */
         foreach ($classes as $class) {
             if (preg_match($this->regexps['negative'], $class)) {
