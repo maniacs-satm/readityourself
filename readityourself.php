@@ -73,11 +73,9 @@ if (isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
         $article->setUrl($url);
 
         if (!$article->isAlreadyExists()) {
-            if ($article->retrieveContent()) {
-                if ($article->readiIt(isset($_GET['debug']))) {
-                    //$article->modifyContent();
-                    //$article->saveContent();
-                }
+            if ($article->readiIt(isset($_GET['debug']))) {
+                //$article->modifyContent();
+                //$article->saveContent();
             }
         } else {
             $article = Article::getArticle($url);

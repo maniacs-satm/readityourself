@@ -31,6 +31,18 @@ class Readityourself extends Readability {
     );
 
     /**
+    * Create instance of Readability
+    * @param string UTF-8 encoded string
+    * @param string (optional) URL associated with HTML (used for footnotes)
+    * @param string which parser to use for turning raw HTML into a DOMDocument (either 'libxml' or 'html5lib')
+    */	
+    function __construct($url=null,$debug=false)
+    {
+        parent::__construct(Readityourself::retrieveContent($url), $url, null);
+        $this->debug = $debug;
+    }
+
+    /**
      * Get the article title as an H1.
      *
      * @return DOMElement
@@ -247,6 +259,11 @@ class Readityourself extends Readability {
 
         /* absolute URL is ready! */
         return $scheme . '://' . $abs;
+    }
+
+    public static function retrieveContent($url) {
+        // convert page to utf-8
+        return Encoding::toUTF8(Utils::get_external_file($url, 15));
     }
 
 }

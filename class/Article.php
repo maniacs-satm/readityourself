@@ -62,12 +62,6 @@ class Article {
         return $this->loaded;
     }
 
-    public function retrieveContent() {
-        // convert page to utf-8
-        $this->setOriginal(Encoding::toUTF8(Utils::get_external_file($this->getUrl(), 15)));
-        return ($this->getOriginal() != null and strlen($this->getOriginal()) > 0);
-    }
-
     public function saveContent() {
         $directory = Utils::create_assets_directory($this->getUrl());
         if (is_dir($directory)) {
@@ -103,14 +97,13 @@ class Article {
         }
     }
 
-    public function readiIt() {
-        if ($this->getOriginal() != null and strlen($this->getOriginal()) > 0) {
-
-            // send result to readability library
-            $readIt = new Readityourself($this->getOriginal(), $this->getUrl());
-            $this->loaded = $readIt->init();
-            $this->setTitle($readIt->articleTitle->innerHTML);
-            $this->setFinalContent($readIt->articleContent->innerHTML);
+    public function readiIt($debug) {
+        // send result to readability library
+        $this->readIt = new Readityourself($this->getUrl(),$debug);
+        $this->loaded = $this->readIt->init();
+        if($this->loaded) {
+            $this->setTitle($this->readIt->articleTitle->innerHTML);
+            $this->setFinalContent($this->readIt->articleContent->innerHTML);
             $this->setDate(date("Y-m-d"));
         }
         return $this->loaded;
