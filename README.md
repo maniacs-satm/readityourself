@@ -3,12 +3,10 @@ readityourself
 
 To read the web without ads, comments, or tweets !
 
-<<<<<<< HEAD
 =======
 Use code from https://bitbucket.org/fivefilters/php-readability/src
 and adapt it to archive the web without ads/script/like and other bad things.
 
->>>>>>> origin/dev_login
 Installation
 ------------
 
@@ -19,14 +17,11 @@ Installation
 * Put an URL in the from and press Submit
 * Enjoy
 
-<<<<<<< HEAD
 Login
 -----
 
 the demo user is demo/demo
 
-=======
->>>>>>> origin/dev_login
 Contact
 -------
 

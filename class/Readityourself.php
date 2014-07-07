@@ -14,13 +14,13 @@ class Readityourself extends Readability {
      * Defined up here so we don't instantiate them repeatedly in loops.
      * */
     public $regexps = array(
-        'unlikelyCandidates' => '/combx|community|comment|disqus|extra|foot|header|menu|remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination|pager|popup|debutDefinition_/i',
-        'okMaybeItsACandidate' => '/and|post|article|body|column|main|shadow/i',
-        'positive' => '/article|content|comic|body|content|entry|hentry|main|page|media|attachment|pagination|post|text|blog|story/i',
-        'negative' => '/combx|com-|contact|comment|foot|footer|_nav|footnote|masthead|meta|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|shopping|tags|tool|widget/i',
+        'unlikelyCandidates' => '/list-operations-dialog|modal-body|combx|community|comment|disqus|extra|foot|header|menu|remark|rss|shoutbox|sidebar|sponsor|ad-break|agegate|pagination|pager|popup|debutDefinition_|sms_codes/i',
+        'okMaybeItsACandidate' => '/tweet|permalink-tweet|js-actionable-user|js-actionable-tweet|js-original-tweet|and|post|article|body|column|main|shadow|js-tweet-text|tweet-text/i',
+        'positive' => '/tweet|permalink-tweet|js-actionable-user|js-actionable-tweet|js-original-tweet|article|content|comic|body|content|entry|hentry|main|page|media|attachment|pagination|post|text|blog|story/i',
+        'negative' => '/list-operations-dialog|modal-body|combx|com-|contact|comment|foot|footer|_nav|footnote|masthead|meta|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|shopping|tags|tool|widget|modal-container|sms_codes/i',
         'htmlPositiveTag' => '/content|article|media|video/',
-        'htmlNegativeTag' => '/footer|header/',
-        'divToPElements' => '/<(a|blockquote|dl|div|img|ol|p|pre|table|ul|code)/i',
+        'htmlNegativeTag' => '/footer|header|button/',
+        'divToPElements' => '/<(td|tr|a|blockquote|dl|div|img|ol|p|pre|table|ul|code)/i',
         'replaceBrs' => '/(<br[^>]*>[ \n\r\t]*){2,}/i',
         'replaceFonts' => '/<(\/?)font[^>]*>/i',
         // 'trimRe' => '/^\s+|\s+$/g', // PHP has trim()

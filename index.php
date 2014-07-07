@@ -2,6 +2,7 @@
 // FUNCTIONS BEGIN
 require_once dirname(__FILE__).'/inc/includes.php';
 
+require_once dirname(__FILE__).'/inc/config.php';
 ?>
 <html>
 	<head>
@@ -65,10 +66,32 @@ require_once dirname(__FILE__).'/inc/includes.php';
 											<input type="text" name="url" id="url" maxlength="2048" size="80" /><input type="submit">
 										</form>
 									</span>
+                                                                    
+                                                                    Or drag and drop this link to your bookmark and <br>
+                                                                        click on it on the page you want to <a href="javascript:(function(){var%20url%20=%20location.href;var%20title%20=%20document.title%20||%20url;window.open('<?=url()?>readityourself.php?&url='%20+%20encodeURIComponent(url),'_self');})();" title="Read It Yourself">Read It Yourself</a>
 								</section>
 							</div>
 						</div>
 					</div>
+                            <?php
+                            /*
+                                $publicArticles = Article::findPublicArticle();
+                                if($publicArticles != null && count($publicArticles) >0) {
+
+                                    foreach ($publicArticles as $article) {
+                                        echo "<tr><th>".$article->getDate()."</th>";
+                                        echo "<td><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td>";
+
+                                        echo "</tr>";
+                                    }
+
+                                }
+                            */
+                            ?>
+
+                            <?php
+                                    if (Session::isLogged()) {
+                                        ?>
 					<div class="container">
 						<div class="row">
 							<div class="9u">
@@ -82,50 +105,40 @@ require_once dirname(__FILE__).'/inc/includes.php';
 						                </tr>
 						            </thead>
 						            <tbody>
-						                
-						            <?php
-						            /*
-						                $publicArticles = Article::findPublicArticle();
-						                if($publicArticles != null && count($publicArticles) >0) {
-						            
-						                    foreach ($publicArticles as $article) {
-						                        echo "<tr><th>".$article->getDate()."</th>";
-						                        echo "<td><a href='readityourself.php?url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td>";
-						
-						                        echo "</tr>";
-						                    }
-						                    
-						                }
-						            */
-						            ?>
-						
-						            <?php
-						                    if (Session::isLogged()) {
-						                        $articles = Article::findArticle($_SESSION['username']);
-						                        if($articles != null && count($articles) >0) {
-						            
-						                            foreach ($articles as $article) {
-						                                echo "<tr><th>".$article->getDate()."</th><td><a href='readityourself.php?
-						                                url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td></tr>";
-						                            }
-						                            
-						                        }
-						                    }
-						            ?>
-						            </tbody>
-						            </table>
+                                <?php
+                                $articles = Article::findArticle($_SESSION['username']);
+                                if($articles != null && count($articles) >0) {
+
+                                    foreach ($articles as $article) {
+                                        echo "<tr><th>".$article->getDate()."</th><td><a href='readityourself.php?
+                                        url=".urlencode($article->getUrl())."' title='".$article->getTitle()."'>".$article->getTitle()."</a></td></tr>";
+                                    }
+
+                                }
+                                ?>
+                                                            </tbody>
+                                                            </table>
 								</section>
 							</div>
 						</div>
 					</div>
+                                        <script>
+                                            window.onload = function() {
+                                                        var sales = new TableSort("readityourself");
+                                                };
+                                        </script>
+                                <?php
+                                        }
+                                ?>
+
 				</div>
 			</div>
 			<div id="copyright">
 				<footer>
 					<div>
 						&copy; Copyright 2014 - <a href="http://www.memiks.fr/">memiks.fr</a> | <a href="http://shaarli.memiks.fr/">Liens</a> / <a href="http://rss.memiks.fr/">RSS</a> / <a href="http://wiki.memiks.fr/">Wiki</a> / <a href="mailto:&#109;&#101;&#109;&#105;&#107;&#115;&#064;&#109;&#101;&#109;&#105;&#107;&#115;&#046;&#102;&#114;">Contact</a>
-						<br>Licence: WTF Licence
-						<br>More information HERE: <a href="http://www.readityourself.net/">http://www.readityourself.net/</a> Version : <span class="version">{$version}</span>
+						<br>Licence: MIT License
+						<br>More information HERE: <a href="http://www.readityourself.net/">http://www.readityourself.net/</a> Version : <span class="version"><?=VERSION?></span>
 						<a href="https://github.com/memiks/readityourself">sources on github</a> | Design: <a href="http://html5up.net">HTML5 UP</a> | Images: <a href="http://fotogrph.com">fotogrph</a>
 					</div>
 				</footer>
