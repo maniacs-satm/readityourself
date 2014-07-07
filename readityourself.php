@@ -90,6 +90,7 @@ if (isset($_GET['url']) && $_GET['url'] != null && trim($_GET['url']) != "") {
             generate_page($article->getUrl(), $article->getTitle(), $article->getFinalContent());
             //generate_page($url,$r->articleTitle->innerHTML,$r->articleContent->innerHTML);
         } else {
+            error_log("Error unable to get link : " . $url);
             echo "Error unable to get link : " . $url;
         }
     }
