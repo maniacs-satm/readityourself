@@ -1,4 +1,13 @@
+* 2014-07-08 Add wrap on word in pre and code tag to stay element in page.  
+  Add strip_tags to remove non used tag (like iframe, link, meta, script etc...)
+  Add method to remove non used attributes (like id, style, class, type etc...).
+* 2014-07-07 Add error log to retrieve link does not correctly handle by readityourself  
+* 2014-07-07 Move article retrieve code to readityourself class.  
+* 2014-07-07 Merge from master  
+* 2014-07-05 BUG on new class code.  
+* 2014-07-05 Changelog  
 * 2014-07-05 Move function from Article and Utils to Readityourself Class. - more readability of the code - use same function on same content in the same class - prepare extend of Readability (and rewriting of the code)  
+* 2014-07-05 Changelog  
 * 2014-06-29 deactivate save to push modification on readityoursel.net on master branch  
 * 2014-06-29 add footer  
 * 2014-06-29 remove old code already in header.html template  
