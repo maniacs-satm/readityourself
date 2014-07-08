@@ -189,9 +189,10 @@ section > :last-child, .last-child {
 #content blockquote,
 #content code {
     font-family: monospace;
+    word-wrap: break-word;
 }
 #content .title, #content a {
-	font-style: bold;
+	font-weight: bold;
 	font-family: arial;
 }
 #content .title {

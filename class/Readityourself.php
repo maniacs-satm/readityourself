@@ -19,10 +19,11 @@ class Readityourself extends Readability {
         'positive' => '/tweet|permalink-tweet|js-actionable-user|js-actionable-tweet|js-original-tweet|article|content|comic|body|content|entry|hentry|main|page|media|attachment|pagination|post|text|blog|story/i',
         'negative' => '/list-operations-dialog|modal-body|combx|com-|contact|comment|foot|footer|_nav|footnote|masthead|meta|outbrain|promo|related|scroll|shoutbox|sidebar|sponsor|shopping|tags|tool|widget|modal-container|sms_codes/i',
         'htmlPositiveTag' => '/content|article|media|video/',
-        'htmlNegativeTag' => '/footer|header|button/',
-        'divToPElements' => '/<(td|tr|a|blockquote|dl|div|img|ol|p|pre|table|ul|code)/i',
+        'htmlNegativeTag' => '/footer|header|button|link|font|meta/',
+        'divToPElements' => '/<(td|tr|a|blockquote|dl|div|img|ol|p|pre|table|ul|code|link|font|meta)/i',
         'replaceBrs' => '/(<br[^>]*>[ \n\r\t]*){2,}/i',
         'replaceFonts' => '/<(\/?)font[^>]*>/i',
+        'allowedTag' => '<figure><h1><h2><h3><h4><a><img><article><p><pre><code><blockquote><xmp><video><embed>',
         // 'trimRe' => '/^\s+|\s+$/g', // PHP has trim()
         'normalize' => '/\s{2,}/',
         'killBreaks' => '/(<br\s*\/?>(\s|&nbsp;?)*){1,}/',
@@ -31,14 +32,15 @@ class Readityourself extends Readability {
     );
 
     /**
-    * Create instance of Readability
-    * @param string UTF-8 encoded string
-    * @param string (optional) URL associated with HTML (used for footnotes)
-    * @param string which parser to use for turning raw HTML into a DOMDocument (either 'libxml' or 'html5lib')
-    */	
-    function __construct($url=null,$debug=false)
-    {
-        parent::__construct(Readityourself::retrieveContent($url), $url, null);
+     * Create instance of Readability
+     * @param string UTF-8 encoded string
+     * @param string (optional) URL associated with HTML (used for footnotes)
+     * @param string which parser to use for turning raw HTML into a DOMDocument (either 'libxml' or 'html5lib')
+     */
+    function __construct($url = null, $debug = false) {
+        $html = Readityourself::retrieveContent($url);
+        parent::__construct($html, $url, null);
+
         $this->debug = $debug;
     }
 
@@ -142,9 +144,76 @@ class Readityourself extends Readability {
     protected function grabArticle($page = null) {
         $articleNode = parent::grabArticle($page);
 
-        $articleNode->innerHTML = $this->modifyContent($articleNode->innerHTML);
+        if($articleNode) {
+            $articleNode->innerHTML = $this->modifyContent($articleNode->innerHTML);
+            $articleNode->innerHTML = strip_tags($articleNode->innerHTML,$this->regexps['allowedTag']);
 
+            //$this->newCounter();
+        }
         return $articleNode;
+    }
+
+    public function newCounter($node = null) {
+        $stripUnlikelyCandidates = $this->flagIsActive(self::FLAG_STRIP_UNLIKELYS);
+        if (!$node)
+            $node = $this->dom;
+
+        $weight = 0;
+
+        for ($index = 0; $index <= $node . length(); $index++) {
+            $node->item($index);
+            $weight += getClassWeight($node);
+            $weight += newCounter($node->item($index));
+        }
+
+
+
+        $allElements = $page->getElementsByTagName('*');
+    }
+
+    /**
+     * Run any post-process modifications to article content as necessary.
+     *
+     * @param DOMElement
+     * @return void
+     */
+    public function postProcessContent($articleContent) {
+        parent::postProcessContent($articleContent);
+        foreach( $articleContent->getElementsByTagName('*') as $element) {
+            if($element->hasAttribute('type')) {
+                $element->removeAttribute('type');
+            }
+            if($element->hasAttribute('rel')) {
+                $element->removeAttribute('rel');
+            }
+            if($element->hasAttribute('type')) {
+                $element->removeAttribute('type');
+            }
+            if($element->hasAttribute('content')) {
+                $element->removeAttribute('content');
+            }
+            if($element->hasAttribute('name')) {
+                $element->removeAttribute('name');
+            }
+            if($element->hasAttribute('style')) {
+                $element->removeAttribute('style');
+            }
+            if($element->hasAttribute('target')) {
+                $element->removeAttribute('target');
+            }
+            if($element->hasAttribute('charset')) {
+                $element->removeAttribute('charset');
+            }
+            if($element->hasAttribute('onclick')) {
+                $element->removeAttribute('onclick');
+            }
+            if($element->hasAttribute('class')) {
+                $element->removeAttribute('class');
+            }
+            if($element->hasAttribute('id')) {
+                $element->removeAttribute('class');
+            }
+        }
     }
 
     public function modifyContent($articleContent) {
