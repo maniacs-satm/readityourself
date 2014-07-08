@@ -228,7 +228,6 @@ class Readityourself extends Readability {
                 $articleContent->removeChild($item); // remove hack
             }
         }
-        $articleContent->encoding = 'UTF-8'; // insert proper
     }
 
     private function close_xhtml($xhtml) {
