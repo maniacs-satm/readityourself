@@ -23,7 +23,7 @@ class Readityourself extends Readability {
         'divToPElements' => '/<(td|tr|a|blockquote|dl|div|img|ol|p|pre|table|ul|code|link|font|meta)/i',
         'replaceBrs' => '/(<br[^>]*>[ \n\r\t]*){2,}/i',
         'replaceFonts' => '/<(\/?)font[^>]*>/i',
-        'allowedTag' => '<figure><h1><h2><h3><h4><a><img><article><p><pre><code><blockquote><xmp><video><embed>',
+        'allowedTag' => '<ul><li><figure><h1><h2><h3><h4><a><img><article><p><pre><code><blockquote><xmp><video><embed>',
         // 'trimRe' => '/^\s+|\s+$/g', // PHP has trim()
         'normalize' => '/\s{2,}/',
         'killBreaks' => '/(<br\s*\/?>(\s|&nbsp;?)*){1,}/',
