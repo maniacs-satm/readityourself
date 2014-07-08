@@ -144,9 +144,9 @@ class Readityourself extends Readability {
     protected function grabArticle($page = null) {
         $articleNode = parent::grabArticle($page);
 
-        if($articleNode) {
+        if ($articleNode) {
             $articleNode->innerHTML = $this->modifyContent($articleNode->innerHTML);
-            $articleNode->innerHTML = strip_tags($articleNode->innerHTML,$this->regexps['allowedTag']);
+            $articleNode->innerHTML = strip_tags($articleNode->innerHTML, $this->regexps['allowedTag']);
 
             //$this->newCounter();
         }
@@ -179,41 +179,78 @@ class Readityourself extends Readability {
      */
     public function postProcessContent($articleContent) {
         parent::postProcessContent($articleContent);
-        foreach( $articleContent->getElementsByTagName('*') as $element) {
-            if($element->hasAttribute('type')) {
+        foreach ($articleContent->getElementsByTagName('*') as $element) {
+            if ($element->hasAttribute('type')) {
                 $element->removeAttribute('type');
             }
-            if($element->hasAttribute('rel')) {
+            if ($element->hasAttribute('href') && preg_match('/^javascript/', $element->getAttribute('href'))) {
+                $element->removeAttribute('href');
+            }
+            if ($element->hasAttribute('rel')) {
                 $element->removeAttribute('rel');
             }
-            if($element->hasAttribute('type')) {
+            if ($element->hasAttribute('type')) {
                 $element->removeAttribute('type');
             }
-            if($element->hasAttribute('content')) {
+            if ($element->hasAttribute('content')) {
                 $element->removeAttribute('content');
             }
-            if($element->hasAttribute('name')) {
+            if ($element->hasAttribute('name')) {
                 $element->removeAttribute('name');
             }
-            if($element->hasAttribute('style')) {
+            if ($element->hasAttribute('style')) {
                 $element->removeAttribute('style');
             }
-            if($element->hasAttribute('target')) {
+            if ($element->hasAttribute('target')) {
                 $element->removeAttribute('target');
             }
-            if($element->hasAttribute('charset')) {
+            if ($element->hasAttribute('charset')) {
                 $element->removeAttribute('charset');
             }
-            if($element->hasAttribute('onclick')) {
+            if ($element->hasAttribute('onclick')) {
                 $element->removeAttribute('onclick');
             }
-            if($element->hasAttribute('class')) {
+            if ($element->hasAttribute('class')) {
                 $element->removeAttribute('class');
             }
-            if($element->hasAttribute('id')) {
+            if ($element->hasAttribute('id')) {
                 $element->removeAttribute('class');
             }
         }
+
+        $articleContent->innerHTML = preg_replace('/<a>(.*)<\/a>/i', '$1', $articleContent->innerHTML);
+        $articleContent->innerHTML = preg_replace('/<p>[ \n\r\t]*<\/p>/i', '', $articleContent->innerHTML);
+        $articleContent->innerHTML = $this->close_xhtml($articleContent->innerHTML);
+
+        // dirty fix
+        foreach ($articleContent->childNodes as $item) {
+            if ($item->nodeType == XML_PI_NODE) {
+                $articleContent->removeChild($item); // remove hack
+            }
+        }
+        $articleContent->encoding = 'UTF-8'; // insert proper
+    }
+
+    private function close_xhtml($xhtml) {
+        $tags = array();
+
+        for ($i = 0; preg_match('`<(/?)([a-z]+)(?:\s+[a-z]+="[^"]*")*>`i', $xhtml, $tag, PREG_OFFSET_CAPTURE, $i); $i = strlen($tag[0][0]) + $tag[0][1]) {
+            if ($tag[1][0] != '/') {
+                $tags[] = $tag[2][0];
+            } elseif ($tag[2][0] == end($tags)) {
+                array_pop($tags);
+            } else {
+                $xhtml = substr_replace($xhtml, '', $tag[0][1], strlen($tag[0][0]));
+            }
+        }
+
+        $xhtml = preg_replace('`<[^>]*$`', '', $xhtml);
+
+        while ($tag = array_pop($tags)) {
+            $xhtml .= '</' . $tag . '>';
+        }
+
+        return $xhtml;
     }
 
     public function modifyContent($articleContent) {
