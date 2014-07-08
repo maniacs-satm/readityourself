@@ -192,7 +192,6 @@ section > :last-child, .last-child {
     word-wrap: break-word;
 }
 #content .title, #content a {
-	font-weight: bold;
 	font-family: arial;
 }
 #content .title {
